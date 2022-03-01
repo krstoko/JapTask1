@@ -29,7 +29,7 @@ const SignIn = () => {
     <React.Fragment>
       <CenteredComponent>
         <Card>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" align="center">
             Sign in
           </Typography>
           <Formik
@@ -45,21 +45,14 @@ const SignIn = () => {
                 type="text"
                 label="Username"
                 name="userName"
-                
               />
               <FormikControl
                 control="input"
                 type="password"
                 label="Password"
                 name="password"
-                
               />
-              <ButtonReusable
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2, height: 50 }}
-              >
+              <ButtonReusable type="submit" fullWidth variant="contained">
                 Sign In
               </ButtonReusable>
               <Link to="/signUp">Don't have an account? Sign Up</Link>

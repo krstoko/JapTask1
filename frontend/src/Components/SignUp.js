@@ -33,7 +33,7 @@ const SignUp = () => {
     <React.Fragment>
       <CenteredComponent>
         <Card>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" align="center">
             Sign Up
           </Typography>
           <Formik

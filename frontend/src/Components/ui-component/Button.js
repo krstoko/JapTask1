@@ -2,7 +2,19 @@ import React from "react";
 import { Button } from "@mui/material";
 
 const ButtonReusable = (props) => {
-  return <Button {...props}>{props.children}</Button>;
+  const style = {
+    ...props.style,
+    mt: 3,
+    mb: 2,
+    height: 50,
+    boxShadow: 2,
+    fontSize: 18
+  };
+  return (
+    <Button sx={style} {...props}>
+      {props.children}
+    </Button>
+  );
 };
 
 export default ButtonReusable;
