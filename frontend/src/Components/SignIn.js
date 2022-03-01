@@ -6,6 +6,7 @@ import CenteredComponent from "./ui-component/CenteredComponent";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import FormikControl from "./FormikComponents/FormikControl";
+import { Link } from "react-router-dom";
 
 const SignIn = () => {
   const onSubmit = (values) => {
@@ -15,7 +16,6 @@ const SignIn = () => {
   const initialValues = {
     userName: "",
     password: "",
-    confirmPassword: "",
   };
 
   const validationSchema = Yup.object({
@@ -23,9 +23,6 @@ const SignIn = () => {
     password: Yup.string()
       .min(6, "At least 6 characters required")
       .required("Password is required"),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password"), null], "Passwords must match")
-      .required("Confirm password is required"),
   });
 
   return (
@@ -48,21 +45,14 @@ const SignIn = () => {
                 type="text"
                 label="Username"
                 name="userName"
-                margin="normal"
+                
               />
               <FormikControl
                 control="input"
                 type="password"
                 label="Password"
                 name="password"
-                margin="normal"
-              />
-              <FormikControl
-                control="input"
-                type="password"
-                label="Confirm Password"
-                name="confirmPassword"
-                margin="normal"
+                
               />
               <ButtonReusable
                 type="submit"
@@ -72,6 +62,7 @@ const SignIn = () => {
               >
                 Sign In
               </ButtonReusable>
+              <Link to="/signUp">Don't have an account? Sign Up</Link>
             </Form>
           </Formik>
         </Card>

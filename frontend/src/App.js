@@ -1,8 +1,14 @@
+import React from "react";
+import { BrowserRouter } from "react-router-dom";
 import "./App.css";
+import MainRouter from "./MainRouter";
 function App() {
   return (
-    <div className="App">
-    </div>
+    <React.Fragment>
+      <BrowserRouter>
+        <MainRouter />
+      </BrowserRouter>
+    </React.Fragment>
   );
 }
 

@@ -16,7 +16,7 @@ const ReusableTextField = ({ name, ...rest }) => {
     configTextField.helperText = mata.error;
   }
 
-  return <TextField {...configTextField} />;
+  return <TextField autoComplete="off" margin="normal" {...configTextField} />;
 };
 
 export default ReusableTextField;

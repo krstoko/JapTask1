@@ -6,6 +6,7 @@ import CenteredComponent from "./ui-component/CenteredComponent";
 import FormikControl from "./FormikComponents/FormikControl";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
   const onSubmit = (values) => {
@@ -48,21 +49,18 @@ const SignUp = () => {
                 type="text"
                 label="Username"
                 name="userName"
-                margin="normal"
               />
               <FormikControl
                 control="input"
                 type="password"
                 label="Password"
                 name="password"
-                margin="normal"
               />
               <FormikControl
                 control="input"
                 type="password"
                 label="Confirm Password"
                 name="confirmPassword"
-                margin="normal"
               />
               <ButtonReusable
                 type="submit"
@@ -70,8 +68,9 @@ const SignUp = () => {
                 variant="contained"
                 sx={{ mt: 3, mb: 2, height: 50 }}
               >
-                Sign In
+                Sign Up
               </ButtonReusable>
+              <Link to="/signIn">Don't have an account? Sign Up</Link>
             </Form>
           </Formik>
         </Card>
