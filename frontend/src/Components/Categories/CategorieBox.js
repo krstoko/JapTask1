@@ -7,8 +7,10 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const CategorieBox = (props) => {
+const CategorieBox = ({ categorie }) => {
+  const navigate = useNavigate();
   const style = {
     boxWrapper: {
       position: "relative",
@@ -23,10 +25,14 @@ const CategorieBox = (props) => {
       padding: "10px",
     },
   };
+  const onCardClick = () => {
+    navigate(`/recipes/${categorie.toLowerCase()}`);
+  };
+
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Card>
-        <CardActionArea>
+        <CardActionArea onClick={onCardClick}>
           <Box sx={style.boxWrapper}>
             <CardMedia
               component="img"
@@ -35,7 +41,7 @@ const CategorieBox = (props) => {
             />
             <Box sx={style.textBox}>
               <Typography variant="h5" align="center">
-                {props.categorie}
+                {categorie}
               </Typography>
             </Box>
           </Box>

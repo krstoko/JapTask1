@@ -19,11 +19,10 @@ const Categories = () => {
     "Italian",
     "Salad",
     "Pie",
-    "Turkey",
   ]);
   return (
     <CenteredComponent maxWidth="lg">
-      <Typography component="h4" variant="h4" align="center" margin="normal">
+      <Typography component="h4" variant="h4" align="center">
         Choose you recipe category
       </Typography>
       <CategoryList categories={categories} />
