@@ -1,8 +1,8 @@
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
-import ButtonReusable from "../ui-component/Button";
-import CenteredComponent from "../ui-component/ContainerPaper";
+import ButtonReusable from "../ui-component/ButtonReusable";
+import ContainerPaper from "../ui-component/ContainerPaper";
 import CategoryList from "./CategoryList";
 
 const Categories = () => {
@@ -21,7 +21,7 @@ const Categories = () => {
     "Pie",
   ]);
   return (
-    <CenteredComponent maxWidth="lg">
+    <ContainerPaper maxWidth="lg">
       <Typography component="h4" variant="h4" align="center">
         Choose you recipe category
       </Typography>
@@ -31,7 +31,7 @@ const Categories = () => {
           Load more
         </ButtonReusable>
       </Box>
-    </CenteredComponent>
+    </ContainerPaper>
   );
 };
 

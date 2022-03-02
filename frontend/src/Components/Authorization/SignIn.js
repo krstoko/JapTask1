@@ -1,8 +1,7 @@
 import { Grid, Typography } from "@mui/material";
 import React from "react";
-import Card from "../ui-component/Card";
-import ButtonReusable from "../ui-component/Button";
-import CenteredComponent from "../ui-component/ContainerPaper";
+import ButtonReusable from "../ui-component/ButtonReusable";
+import ContainerPaper from "../ui-component/ContainerPaper";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import FormikControl from "../FormikComponents/FormikControl";
@@ -27,7 +26,7 @@ const SignIn = () => {
 
   return (
     <React.Fragment>
-      <CenteredComponent type="centered">
+      <ContainerPaper type="centered">
           <Typography component="h1" variant="h5" align="center">
             Sign in
           </Typography>
@@ -62,7 +61,7 @@ const SignIn = () => {
             </Form>
           </Formik>
       
-      </CenteredComponent>
+      </ContainerPaper>
     </React.Fragment>
   );
 };

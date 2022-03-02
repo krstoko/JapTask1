@@ -2,7 +2,7 @@ import { Container } from "@mui/material";
 import React from "react";
 import Card from "./Card";
 
-const CenteredComponent = (props) => {
+const ContainerPaper = (props) => {
   const style = {
     centered: {
       position: "absolute",
@@ -22,4 +22,4 @@ const CenteredComponent = (props) => {
   );
 };
 
-export default CenteredComponent;
+export default ContainerPaper;

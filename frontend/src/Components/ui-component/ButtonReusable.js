@@ -6,8 +6,6 @@ const ButtonReusable = (props) => {
     ...props.style,
     mt: 3,
     mb: 2,
-    height: 50,
-    boxShadow: 2,
     fontSize: 18
   };
   return (
