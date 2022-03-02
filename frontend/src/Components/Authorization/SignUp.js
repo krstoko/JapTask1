@@ -1,9 +1,9 @@
-import { Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import React from "react";
-import Card from "./ui-component/Card";
-import ButtonReusable from "./ui-component/Button";
-import CenteredComponent from "./ui-component/CenteredComponent";
-import FormikControl from "./FormikComponents/FormikControl";
+import Card from "../ui-component/Card";
+import ButtonReusable from "../ui-component/Button";
+import CenteredComponent from "../ui-component/ContainerPaper";
+import FormikControl from "../FormikComponents/FormikControl";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
 import { Link } from "react-router-dom";
@@ -31,8 +31,8 @@ const SignUp = () => {
 
   return (
     <React.Fragment>
-      <CenteredComponent>
-        <Card>
+      <CenteredComponent type="centered">
+
           <Typography component="h1" variant="h5" align="center">
             Sign Up
           </Typography>
@@ -66,14 +66,17 @@ const SignUp = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2, height: 50 }}
               >
                 Sign Up
               </ButtonReusable>
-              <Link to="/signIn">Don't have an account? Sign Up</Link>
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Link to="/signIn">Already have an account? Sign in</Link>
+                </Grid>
+              </Grid>
             </Form>
           </Formik>
-        </Card>
+    
       </CenteredComponent>
     </React.Fragment>
   );
