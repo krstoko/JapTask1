@@ -5,15 +5,16 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ButtonReusable from "../ui-component/ButtonReusable";
 import { Box } from "@mui/system";
 import { useNavigate } from "react-router-dom";
+import RecipesBody from "./RecipesBody";
 
 const Recipes = () => {
-    const navigate = useNavigate()
-    const style = {
-        width: "100%"
-    }
-    const onBackClick = () =>{
-        navigate("/categories")
-    }
+  const navigate = useNavigate();
+  const style = {
+    width: "100%",
+  };
+  const onBackClick = () => {
+    navigate("/categories");
+  };
   return (
     <ContainerPaper maxWidth="lg">
       <Header>
@@ -26,14 +27,12 @@ const Recipes = () => {
           >
             Go Back
           </ButtonReusable>
-          <ButtonReusable
-            variant="contained"
-            size="small"
-          >
+          <ButtonReusable variant="contained" size="small">
             Add Recipe
           </ButtonReusable>
         </Box>
       </Header>
+      <RecipesBody />
     </ContainerPaper>
   );
 };
