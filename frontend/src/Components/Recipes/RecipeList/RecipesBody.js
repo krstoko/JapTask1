@@ -1,8 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import React, { useState } from "react";
-import SearchBar from "../ui-component/SearchBar";
+import SearchBar from "../../ui-component/SearchBar";
 import RecipeList from "./RecipeList";
-import ButtonReusable from "../ui-component/ButtonReusable";
+import ButtonReusable from "../../ui-component/ButtonReusable";
 const RecipesBody = () => {
   const style = {
     width: "100%",

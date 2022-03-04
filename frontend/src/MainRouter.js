@@ -3,7 +3,9 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import SignIn from "./Components/Authorization/SignIn";
 import SignUp from "./Components/Authorization/SignUp";
 import Categories from "./Components/Categories/Categories";
-import Recipes from "./Components/Recipes/Recipes";
+import RecipeAdd from "./Components/Recipes/RecipeAdd/RecipeAdd";
+import Recipe from "./Components/Recipes/RecipeDetails/Recipe";
+import Recipes from "./Components/Recipes/RecipeList/Recipes";
 const MainRouter = () => {
   return (
     <React.Fragment>
@@ -13,6 +15,8 @@ const MainRouter = () => {
         <Route path="signUp" element={<SignUp />} />
         <Route path="categories" element={<Categories />} />
         <Route path="recipes/:categorie" element={<Recipes />} />
+        <Route path="recipe/:id" element={<Recipe />} />
+        <Route path="recipe/add" element={<RecipeAdd />} />
       </Routes>
     </React.Fragment>
   );

@@ -2,7 +2,7 @@ import { TextField } from "@mui/material";
 import { useField } from "formik";
 import React from "react";
 
-const ReusableTextField = ({ name, ...rest }) => {
+const Input = ({ name, ...rest }) => {
   const [field, mata] = useField(name);
 
   const configTextField = {
@@ -16,7 +16,7 @@ const ReusableTextField = ({ name, ...rest }) => {
     configTextField.helperText = mata.error;
   }
 
-  return <TextField autoComplete="off" margin="normal" {...configTextField} />;
+  return <TextField autoComplete="off" margin="normal" {...configTextField} multiline={true}  rows={5}/>;
 };
 
-export default ReusableTextField;
+export default Input;
