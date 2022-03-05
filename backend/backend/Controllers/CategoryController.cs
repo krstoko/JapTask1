@@ -1,4 +1,5 @@
 ﻿
+using backend.Dtos.Category;
 using backend.Models;
 using backend.Services.CategoryService;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ namespace backend.Controllers
             _categoryService = categoryService;
         }
         [HttpGet("GetAll")]
-        public async Task<ActionResult<ServiceResponse<List<Category>>>> GetCategories()
+        public async Task<ActionResult<ServiceResponse<List<GetCategoryDto>>>> GetCategories()
         {
             return Ok(await _categoryService.GetAllCategories());
         }

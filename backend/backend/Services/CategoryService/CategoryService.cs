@@ -1,5 +1,8 @@
-﻿using backend.Models;
+﻿using AutoMapper;
+using backend.Dtos.Category;
+using backend.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace backend.Services.CategoryService
@@ -11,10 +14,15 @@ namespace backend.Services.CategoryService
             new Category(),
             new Category{ Id = 1, CategoryName = "Oil" }
         };
-        public async Task<ServiceResponse<List<Category>>> GetAllCategories()
+        private readonly IMapper _mapper;
+        public CategoryService(IMapper mapper)
         {
-            var serviceResponse = new ServiceResponse<List<Category>>();
-            serviceResponse.Data = categories;
+            _mapper = mapper;
+        }
+        public async Task<ServiceResponse<List<GetCategoryDto>>> GetAllCategories()
+        {
+            var serviceResponse = new ServiceResponse<List<GetCategoryDto>>();
+            serviceResponse.Data = categories.Select(c => _mapper.Map<GetCategoryDto>(c)).ToList();
             return serviceResponse;
         }
     }

@@ -26,6 +26,7 @@ namespace backend
         {
             services.AddControllers();
             services.AddRazorPages();
+            services.AddAutoMapper(typeof(Startup));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "JapTask", Version = "v1" });
