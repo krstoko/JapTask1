@@ -1,11 +1,12 @@
 ﻿using backend.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace backend.Services.CategoryService
 {
     public interface ICategoryService
     {
-        List<Category> GetAllCategories();
+        Task<ServiceResponse<List<Category>>> GetAllCategories();
 
     }
 }

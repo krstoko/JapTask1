@@ -3,6 +3,7 @@ using backend.Models;
 using backend.Services.CategoryService;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace backend.Controllers
 {
@@ -10,20 +11,15 @@ namespace backend.Controllers
     [Route("[controller]")]
     public class CategoryController : ControllerBase
     {
-        private static List<Category> categories = new List<Category>
-        {
-            new Category(),
-            new Category{ Id = 1, CategoryName = "Oil" }
-        };
         private readonly ICategoryService _categoryService;
         public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }
-        [HttpGet]
-        public ActionResult<Category> get()
+        [HttpGet("GetAll")]
+        public async Task<ActionResult<ServiceResponse<List<Category>>>> GetCategories()
         {
-            return Ok(_categoryService.GetAllCategories());
+            return Ok(await _categoryService.GetAllCategories());
         }
 
     }

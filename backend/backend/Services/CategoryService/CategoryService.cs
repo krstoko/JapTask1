@@ -1,5 +1,6 @@
 ﻿using backend.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace backend.Services.CategoryService
 {
@@ -10,9 +11,11 @@ namespace backend.Services.CategoryService
             new Category(),
             new Category{ Id = 1, CategoryName = "Oil" }
         };
-        public List<Category> GetAllCategories()
+        public async Task<ServiceResponse<List<Category>>> GetAllCategories()
         {
-            return categories;
+            var serviceResponse = new ServiceResponse<List<Category>>();
+            serviceResponse.Data = categories;
+            return serviceResponse;
         }
     }
 }
