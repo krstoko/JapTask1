@@ -43,7 +43,6 @@ const RecipeAddBody = () => {
     setIngredients((prevState) => [...prevState, ingredient]);
   };
 
-  console.log(ingredients);
 
   const columns = [
     {
@@ -77,9 +76,14 @@ const RecipeAddBody = () => {
     },
   ];
 
-  const rows = ingredients.map((ingredient,id) =>{
-    return {id: id + 1, name: ingredient.name,quantity: ingredient.quantity,measureUnit: ingredient.measureUnit}
-  })
+  const rows = ingredients.map((ingredient, id) => {
+    return {
+      id: id + 1,
+      name: ingredient.name,
+      quantity: ingredient.quantity,
+      measureUnit: ingredient.measureUnit,
+    };
+  });
 
   return (
     <React.Fragment>
