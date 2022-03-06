@@ -26,6 +26,7 @@ namespace backend.Services.CategoryService
             var piece = dbCategories.Skip(displeyedCategories).Take(pageSize).ToList();
             if (dbCategories.Count() <= displeyedCategories + pageSize)
             {
+                serviceResponse.LoadMore = false;
                 serviceResponse.Message = "Cant load more";
             }
             serviceResponse.Data = piece;

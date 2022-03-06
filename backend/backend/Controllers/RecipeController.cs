@@ -18,9 +18,9 @@ namespace backend.Controllers
             _recipeService = recipeService;
         }
         [HttpGet("{categoryName}")]
-        public async Task<ActionResult<ServiceResponse<List<GetRecipeDto>>>> GetCategoryRecipes(string categoryName, int displeyedCategories, int pageSize)
+        public async Task<ActionResult<ServiceResponse<List<GetRecipeDto>>>> GetCategoryRecipes(string categoryName, int displeyedRecipes, int pageSize)
         {
-            var result = await _recipeService.GetCategoryRecipes(categoryName);
+            var result = await _recipeService.GetCategoryRecipes(categoryName, displeyedRecipes, pageSize);
             if (result.Data == null)
             {
                 return NotFound(result);

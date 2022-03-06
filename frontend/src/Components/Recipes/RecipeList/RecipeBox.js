@@ -19,12 +19,12 @@ const RecipeBox = ({recipe}) => {
         <CardMedia
           component="img"
           height="140"
-          image="https://mui.com/static/images/cards/contemplative-reptile.jpg"
+          image={recipe.recipeImgUrl}
           alt="green iguana"
         />
         <CardContent sx={style}>
           <Typography gutterBottom variant="h5" component="div">
-            {recipe.name}
+            {recipe.recipeName}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {recipe.price}$

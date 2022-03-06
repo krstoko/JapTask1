@@ -5,8 +5,8 @@ import RecipeBox from "./RecipeBox";
 const RecipeList = (props) => {
   return (
     <Grid container spacing={4} mt={1}>
-      {props.recipes.map((recipe, id) => (
-        <RecipeBox recipe={recipe} key={id} />
+      {props.recipes.map((recipe) => (
+        <RecipeBox recipe={recipe} key={recipe.id} />
       ))}
     </Grid>
   );

@@ -11,7 +11,7 @@ const Categories = () => {
   const [categories, setCategories] = useState([]);
 
   const addingNewCategories = (response) => {
-    if (response.message === "Cant load more") {
+    if (!response.loadMore) {
       setLoadMore(false);
     }
     setCategories((prevState) => [...prevState, ...response.data]);
@@ -24,7 +24,7 @@ const Categories = () => {
   };
 
   useEffect(() => {
-    listCategories(categories.length, 9)
+    listCategories(0, 9)
       .then((response) => addingNewCategories(response))
       .catch((err) => console.log(err));
   }, []);

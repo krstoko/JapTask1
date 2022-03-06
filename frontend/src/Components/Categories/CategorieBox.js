@@ -26,7 +26,7 @@ const CategorieBox = ({ categorie }) => {
     },
   };
   const onCardClick = () => {
-    navigate(`/recipes/${categorie.toLowerCase()}`);
+    navigate(`/recipes/${categorie.categoryName.toLowerCase()}`);
   };
 
   return (

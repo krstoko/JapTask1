@@ -21,7 +21,7 @@ namespace backend.Services.RecipeService
             _dataContext = dataContext;
         }
 
-        public async Task<ServiceResponse<List<GetRecipeDto>>> GetCategoryRecipes(string categoryName)
+        public async Task<ServiceResponse<List<GetRecipeDto>>> GetCategoryRecipes(string categoryName, int displeyedRecipes, int pageSize)
         {
             var response = new ServiceResponse<List<GetRecipeDto>>();
             try
@@ -29,8 +29,16 @@ namespace backend.Services.RecipeService
                 Category category = await _dataContext.Categories.FirstOrDefaultAsync(c => c.CategoryName == categoryName);
                 if (category != null)
                 {
+
                     var dbRecipes = await _dataContext.Recipes.Where(r => r.Category.CategoryName == categoryName).ToListAsync();
-                    response.Data = dbRecipes.Select(r => _mapper.Map<GetRecipeDto>(r)).ToList();
+                    var allRecipes = dbRecipes.Count();
+                    if (allRecipes <= displeyedRecipes + pageSize)
+                    {
+                        response.LoadMore = false;
+                        response.Message = "Cant load more";
+                    }
+                    response.Data = dbRecipes.Skip(displeyedRecipes).Take(pageSize).Select(r => _mapper.Map<GetRecipeDto>(r)).ToList();
+                    response.TotalDataNumber = allRecipes;
                 }
                 else
                 {
