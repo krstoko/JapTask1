@@ -7,6 +7,6 @@ namespace backend.Services.RecipeService
 {
     public interface IRecipeService
     {
-        Task<ServiceResponse<List<GetRecipeDtocs>>> GetCategoryRecipes(int categoryId);
+        Task<ServiceResponse<List<GetRecipeDto>>> GetCategoryRecipes(string categoryName);
     }
 }

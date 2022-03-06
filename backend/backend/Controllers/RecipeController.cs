@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using backend.Dtos.Recipe;
+using backend.Models;
+using backend.Services.RecipeService;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace backend.Controllers
 {
@@ -7,14 +12,20 @@ namespace backend.Controllers
     public class RecipeController : ControllerBase
     {
 
-        private readonly ICategoryService _categoryService;
-        public CategoryController(ICategoryService categoryService)
+        private readonly IRecipeService _recipeService;
+        public RecipeController(IRecipeService recipeService)
         {
-            _categoryService = categoryService;
+            _recipeService = recipeService;
         }
-        public IActionResult Index()
+        [HttpGet("{categoryName}")]
+        public async Task<ActionResult<ServiceResponse<List<GetRecipeDto>>>> GetCategoryRecipes(string categoryName, int displeyedCategories, int pageSize)
         {
-            return View();
+            var result = await _recipeService.GetCategoryRecipes(categoryName);
+            if (result.Data == null)
+            {
+                return NotFound(result);
+            }
+            return Ok(result);
         }
     }
 }
