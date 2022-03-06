@@ -8,34 +8,40 @@ import CategoryList from "./CategoryList";
 
 const Categories = () => {
   const [loadMore, setLoadMore] = useState(true);
+  const [categories, setCategories] = useState([]);
+
   const addingNewCategories = (response) => {
     if (response.message === "Cant load more") {
       setLoadMore(false);
     }
     setCategories((prevState) => [...prevState, ...response.data]);
   };
+
   const onClickHandler = () => {
     listCategories(categories.length, 9)
       .then((response) => addingNewCategories(response))
       .catch((err) => console.log(err));
   };
-  const [categories, setCategories] = useState([]);
+
   useEffect(() => {
     listCategories(categories.length, 9)
       .then((response) => addingNewCategories(response))
       .catch((err) => console.log(err));
   }, []);
+
   return (
     <ContainerPaper maxWidth="lg">
       <Typography component="h4" variant="h4" align="center">
         Choose you recipe category
       </Typography>
       <CategoryList categories={categories} />
-     {loadMore && (<Box my={2} display="flex" justifyContent="center">
-        <ButtonReusable variant="outlined" onClick={onClickHandler}>
-          Load more
-        </ButtonReusable>
-      </Box>)}
+      {loadMore && (
+        <Box my={2} display="flex" justifyContent="center">
+          <ButtonReusable variant="outlined" onClick={onClickHandler}>
+            Load more
+          </ButtonReusable>
+        </Box>
+      )}
     </ContainerPaper>
   );
 };

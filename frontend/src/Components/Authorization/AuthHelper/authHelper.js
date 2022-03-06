@@ -1,6 +1,7 @@
 const authenticate = (jwt) => {
   if (typeof window !== "undefined") {
-    sessionStorage.setItem("jwt", JSON.stringify(jwt));
+    console.log(jwt);
+    sessionStorage.setItem("jwt", jwt);
   }
 };
 const isAuthentcated = () => {
@@ -10,7 +11,7 @@ const isAuthentcated = () => {
   if (!getToken) {
     return false;
   }
-  return true;
+  return false;
 };
 
-export default { authenticate, isAuthentcated };
+export { authenticate, isAuthentcated };
