@@ -37,11 +37,11 @@ const CategorieBox = ({ categorie }) => {
             <CardMedia
               component="img"
               height="200"
-              image="https://mui.com/static/images/cards/contemplative-reptile.jpg"
+              image={categorie.categoryImgUrl}
             />
             <Box sx={style.textBox}>
               <Typography variant="h5" align="center">
-                {categorie}
+                {categorie.categoryName}
               </Typography>
             </Box>
           </Box>

@@ -17,10 +17,11 @@ namespace backend.Controllers
         {
             _categoryService = categoryService;
         }
-        [HttpGet("GetAll")]
-        public async Task<ActionResult<ServiceResponse<List<GetCategoryDto>>>> GetCategories()
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<ServiceResponse<List<GetCategoryDto>>>> GetCategories(int displeyedCategories, int pageSize)
         {
-            return Ok(await _categoryService.GetAllCategories());
+            return Ok(await _categoryService.GetAllCategories(displeyedCategories, pageSize));
         }
 
     }

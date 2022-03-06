@@ -7,7 +7,7 @@ namespace backend.Services.CategoryService
 {
     public interface ICategoryService
     {
-        Task<ServiceResponse<List<GetCategoryDto>>> GetAllCategories();
+        Task<ServiceResponse<List<GetCategoryDto>>> GetAllCategories(int pageNumber, int pageSize);
 
     }
 }

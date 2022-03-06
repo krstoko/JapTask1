@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using backend.Data;
 using backend.Dtos.Category;
 using backend.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,20 +11,24 @@ namespace backend.Services.CategoryService
 {
     public class CategoryService : ICategoryService
     {
-        private static List<Category> categories = new List<Category>
-        {
-            new Category(),
-            new Category{ Id = 1, CategoryName = "Oil" }
-        };
+
         private readonly IMapper _mapper;
-        public CategoryService(IMapper mapper)
+        private readonly DataContext _dataContext;
+        public CategoryService(IMapper mapper, DataContext dataContext)
         {
             _mapper = mapper;
+            _dataContext = dataContext;
         }
-        public async Task<ServiceResponse<List<GetCategoryDto>>> GetAllCategories()
+        public async Task<ServiceResponse<List<GetCategoryDto>>> GetAllCategories(int displeyedCategories, int pageSize)
         {
             var serviceResponse = new ServiceResponse<List<GetCategoryDto>>();
-            serviceResponse.Data = categories.Select(c => _mapper.Map<GetCategoryDto>(c)).ToList();
+            var dbCategories = await _dataContext.Categories.OrderByDescending(c => c.CreatedDate).Select(c => _mapper.Map<GetCategoryDto>(c)).ToListAsync();
+            var piece = dbCategories.Skip(displeyedCategories).Take(pageSize).ToList();
+            if (dbCategories.Count() <= displeyedCategories + pageSize)
+            {
+                serviceResponse.Message = "Cant load more";
+            }
+            serviceResponse.Data = piece;
             return serviceResponse;
         }
     }
