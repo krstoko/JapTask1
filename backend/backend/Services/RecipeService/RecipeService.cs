@@ -89,5 +89,18 @@ namespace backend.Services.RecipeService
 
             return response;
         }
+
+        public async Task<ServiceResponse<GetRecipeDto>> GetSingleRecipe(int recipeId)
+        {
+            var response = new ServiceResponse<GetRecipeDto>();
+            var recipe = await _dataContext.Recipes.Include(r => r.Category).FirstOrDefaultAsync(r => r.Id == recipeId);
+            if (recipe == null)
+            {
+                response.Success = false;
+                response.Message = "No recipe with that Id";
+            }
+            response.Data = _mapper.Map<GetRecipeDto>(recipe);
+            return response;
+        }
     }
 }

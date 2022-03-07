@@ -9,7 +9,7 @@ const RecipeBox = ({recipe}) => {
         justifyContent: "space-between"
     }
     const onRecipeClick = () =>{
-        navigate(`/recipe/${recipe.name}`)
+        navigate(`/recipe/${recipe.id}`)
     }
 
   return (

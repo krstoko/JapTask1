@@ -13,7 +13,7 @@ const MainRouter = () => {
         <Route path="signIn" element={<SignIn />} />
         <Route path="categories" element={<Categories />} />
         <Route path="recipes/:categorieName" element={<Recipes />} />
-        <Route path="recipe/:id" element={<Recipe />} />
+        <Route path="recipe/:recipeId" element={<Recipe />} />
         <Route path="recipe/add" element={<RecipeAdd />} />
       </Routes>
     </React.Fragment>

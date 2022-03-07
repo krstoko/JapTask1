@@ -37,5 +37,15 @@ namespace backend.Controllers
             }
             return Ok(result);
         }
+        [HttpGet("Single/{recipeId}")]
+        public async Task<ActionResult<ServiceResponse<List<GetRecipeDto>>>> GetSingleRecipe(int recipeId)
+        {
+            var result = await _recipeService.GetSingleRecipe(recipeId);
+            if (result.Data == null)
+            {
+                return NotFound(result);
+            }
+            return Ok(result);
+        }
     }
 }

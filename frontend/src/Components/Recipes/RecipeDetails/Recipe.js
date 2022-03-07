@@ -1,19 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ContainerPaper from "../../ui-component/ContainerPaper";
 import Header from "../../ui-component/Header";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import RecipeBody from "./RecipeBody";
+import { singleRecipe } from "../../../ApiService/RecipesApi";
+import RecipeContext from "../../../store/recipetDetails-content";
+import { RecipeDetailsContextProvider } from "../../../store/RecipeDetailsContextProvider";
 
 const Recipe = () => {
-    const navigate = useNavigate()
-    const onBackClick = () =>{
-        navigate("/categories")
-    }
+  const navigate = useNavigate();
+
+  const onBackClick = () => {
+    navigate("/categories");
+  };
 
   return (
     <ContainerPaper maxWidth="lg">
       <Header onBackClick={onBackClick} />
-      <RecipeBody/>
+      <RecipeDetailsContextProvider>
+        <RecipeBody />
+      </RecipeDetailsContextProvider>
     </ContainerPaper>
   );
 };
