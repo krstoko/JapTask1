@@ -9,5 +9,16 @@ const listCategories = (displeyedCategories, pageSize) => {
     .catch((err) => console.log(err));
 };
 
+const getAllCategories = () => {
+  return fetch(
+    `https://localhost:44372/category/all`,
+    {
+      method: "GET",
+    }
+  )
+    .then((response) => response.json())
+    .catch((err) => console.log(err));
+};
 
-export { listCategories };
+
+export { listCategories,getAllCategories };

@@ -1,8 +1,6 @@
-import { Box, Grid } from "@mui/material";
-import { Form, Formik } from "formik";
-import React from "react";
+import {  Grid } from "@mui/material";
+import React, { useState } from "react";
 import FormikControl from "../../FormikComponents/FormikControl";
-import * as Yup from "yup";
 import ButtonReusable from "../../ui-component/ButtonReusable";
 
 const IngredientsForm = (props) => {
@@ -24,6 +22,7 @@ const IngredientsForm = (props) => {
   const onAddIngredient = (values) => {
     props.newIngredient(values);
   };
+  const [error, setError] = useState({ isError: false, message: "" });
 
   return (
     <Grid container columnSpacing={5} justifyContent="flex-end">
@@ -34,6 +33,7 @@ const IngredientsForm = (props) => {
           label="Recipe Name"
           name="ingrediantName"
           options={ingredients}
+          errors={error}
         />
       </Grid>
       <Grid item xs={6}>
@@ -52,6 +52,7 @@ const IngredientsForm = (props) => {
           name="measureQuantity"
           label="Measure Quantity"
           InputProps={{ inputProps: { min: "0", max: "10", step: "0.1" } }}
+          errors={error}
         />
       </Grid>
       <Grid item xs={6}>

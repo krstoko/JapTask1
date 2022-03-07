@@ -19,7 +19,16 @@ namespace backend.Services.CategoryService
             _mapper = mapper;
             _dataContext = dataContext;
         }
-        public async Task<ServiceResponse<List<GetCategoryDto>>> GetAllCategories(int displeyedCategories, int pageSize)
+
+        public async Task<ServiceResponse<List<GetCategoryDto>>> GetAllCategories()
+        {
+            var serviceResponse = new ServiceResponse<List<GetCategoryDto>>();
+            var dbCategories = await _dataContext.Categories.Select(c => _mapper.Map<GetCategoryDto>(c)).ToListAsync();
+            serviceResponse.Data = dbCategories;
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<List<GetCategoryDto>>> GetLoadMoreCategories(int displeyedCategories, int pageSize)
         {
             var serviceResponse = new ServiceResponse<List<GetCategoryDto>>();
             var dbCategories = await _dataContext.Categories.OrderByDescending(c => c.CreatedDate).Select(c => _mapper.Map<GetCategoryDto>(c)).ToListAsync();

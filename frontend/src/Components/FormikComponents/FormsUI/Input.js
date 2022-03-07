@@ -2,7 +2,7 @@ import { TextField } from "@mui/material";
 import { useField } from "formik";
 import React from "react";
 
-const Input = ({ name, errorProp, ...rest }) => {
+const Input = ({ name, errors, ...rest }) => {
   const [field, mata] = useField(name);
 
   const configTextField = {
@@ -14,9 +14,9 @@ const Input = ({ name, errorProp, ...rest }) => {
   if (mata && mata.touched && mata.error) {
     configTextField.error = true;
     configTextField.helperText = mata.error;
-  } else if (errorProp.isError) {
+  } else if (errors.isError) {
     configTextField.error = true;
-    configTextField.helperText = errorProp.message;
+    configTextField.helperText = errors.message;
   }
 
   return <TextField autoComplete="off" margin="normal" {...configTextField} />;

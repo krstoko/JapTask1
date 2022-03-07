@@ -22,6 +22,7 @@ const RecipeAddBody = () => {
     ingrediantName: "",
     measureUnit: "",
     measureQuantity: "",
+    recipeImgUrl: ""
   };
 
   const validationSchema = Yup.object({
@@ -31,10 +32,10 @@ const RecipeAddBody = () => {
     ingrediantName: Yup.string().required("Ingredient name is required"),
     measureUnit: Yup.string().required("Measure unit is required"),
     measureQuantity: Yup.string().required("Measure quantity is required"),
+    recipeImgUrl:  Yup.string().required("Image url is required")
   });
 
   const newIngredient = () => {
-    console.log(ref.current.values);
     let ingredient = {
       name: ref.current.values.ingrediantName,
       measureUnit: ref.current.values.measureUnit,

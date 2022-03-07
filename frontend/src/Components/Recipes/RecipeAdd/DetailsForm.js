@@ -1,15 +1,29 @@
 import { Grid } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getAllCategories } from "../../../ApiService/CategoriesApi";
 import FormikControl from "../../FormikComponents/FormikControl";
 
 const DetailsForm = () => {
-  const categories = [
-    { id: 1, name: "Pizza" },
-    { id: 2, name: "Nesto durgo" },
-    { id: 3, name: "TRece" },
-    { id: 4, name: "Auu" },
-    { id: 5, name: "Dadad" },
-  ];
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    getAllCategories()
+      .then((res) => {
+        const selectCategories = renameObjKey(res.data);
+        setCategories(selectCategories)
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const renameObjKey = (array) => {
+    array = array.map((obj) => {
+      obj["name"] = obj["categoryName"];
+      delete obj["categoryName"];
+      return obj;
+    });
+    return array;
+  };
+
+  const [error, setError] = useState({ isError: false, message: "" });
   return (
     <Grid container columnSpacing={5}>
       <Grid item xs={6}>
@@ -18,6 +32,7 @@ const DetailsForm = () => {
           type="text"
           label="Recipe Name"
           name="recipeName"
+          errors={error}
         />
       </Grid>
       <Grid item xs={6}>
@@ -26,6 +41,15 @@ const DetailsForm = () => {
           name="categorie"
           label="Recipe Category"
           options={categories}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <FormikControl
+          control="input"
+          type="text"
+          label="Recipe Image Url"
+          name="recipeImgUrl"
+          errors={error}
         />
       </Grid>
       <Grid item xs={12}>

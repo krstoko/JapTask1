@@ -19,9 +19,15 @@ namespace backend.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<ServiceResponse<List<GetCategoryDto>>>> GetCategories(int displeyedCategories, int pageSize)
+        public async Task<ActionResult<ServiceResponse<List<GetCategoryDto>>>> GetLoadMoreCategories(int displeyedCategories, int pageSize)
         {
-            return Ok(await _categoryService.GetAllCategories(displeyedCategories, pageSize));
+            return Ok(await _categoryService.GetLoadMoreCategories(displeyedCategories, pageSize));
+        }
+
+        [HttpGet("All")]
+        public async Task<ActionResult<ServiceResponse<List<GetCategoryDto>>>> GetAllCategory()
+        {
+            return Ok(await _categoryService.GetAllCategories());
         }
 
     }

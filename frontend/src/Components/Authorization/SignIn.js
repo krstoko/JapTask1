@@ -54,14 +54,14 @@ const SignIn = () => {
               type="text"
               label="Username"
               name="username"
-              errorProp={error}
+              errors={error}
             />
             <FormikControl
               control="input"
               type="password"
               label="Password"
               name="password"
-              errorProp={error}
+              errors={error}
             />
             <ButtonReusable type="submit" fullWidth variant="contained">
               Sign In
