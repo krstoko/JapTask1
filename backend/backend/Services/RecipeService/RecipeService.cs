@@ -21,6 +21,37 @@ namespace backend.Services.RecipeService
             _dataContext = dataContext;
         }
 
+        public async Task<ServiceResponse<List<GetRecipeDto>>> AddRecipe(AddRecipeDto newRecipe)
+        {
+            var response = new ServiceResponse<List<GetRecipeDto>>();
+            try
+            {
+                Recipe recipe = _mapper.Map<Recipe>(newRecipe);
+                var recipeCategory = await _dataContext.Categories.FirstOrDefaultAsync(c => c.CategoryName == newRecipe.CategoryName);
+                if (recipeCategory == null)
+                {
+                    response.Success = false;
+                    response.Message = "Category not found";
+                }
+                else
+                {
+                    recipe.Category = recipeCategory;
+                    _dataContext.Recipes.Add(recipe);
+                    await _dataContext.SaveChangesAsync();
+                    response.Data = await _dataContext.Recipes.Select(r => _mapper.Map<GetRecipeDto>(r)).ToListAsync();
+                }
+
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
         public async Task<ServiceResponse<List<GetRecipeDto>>> GetCategoryRecipes(string categoryName, int displeyedRecipes, int pageSize)
         {
             var response = new ServiceResponse<List<GetRecipeDto>>();

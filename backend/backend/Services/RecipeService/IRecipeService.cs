@@ -10,5 +10,6 @@ namespace backend.Services.RecipeService
         Task<ServiceResponse<List<GetRecipeDto>>> GetCategoryRecipes(string categoryName, int displeyedRecipes, int pageSize);
         Task<ServiceResponse<List<GetRecipeDto>>> GetSearchRecipes(string categoryName, string searchValue, int displeyedRecipes, int pageSize);
         Task<ServiceResponse<GetRecipeDto>> GetSingleRecipe(int recipeId);
+        Task<ServiceResponse<List<GetRecipeDto>>> AddRecipe(AddRecipeDto newRecipe);
     }
 }

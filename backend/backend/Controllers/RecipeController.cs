@@ -47,5 +47,15 @@ namespace backend.Controllers
             }
             return Ok(result);
         }
+        [HttpPost("Add")]
+        public async Task<ActionResult<ServiceResponse<List<GetRecipeDto>>>> AddRecipe(AddRecipeDto newRecipe)
+        {
+            var result = await _recipeService.AddRecipe(newRecipe);
+            if (result.Success == false)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
     }
 }

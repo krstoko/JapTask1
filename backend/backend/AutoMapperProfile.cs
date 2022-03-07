@@ -12,6 +12,7 @@ namespace backend
         {
             CreateMap<Category, GetCategoryDto>();
             CreateMap<Recipe, GetRecipeDto>();
+            CreateMap<AddRecipeDto, Recipe>();
         }
     }
 }

@@ -34,5 +34,16 @@ const singleRecipe = (recipeId) => {
     .then((response) => response.json())
     .catch((err) => console.log(err));
 };
-
-export { listRecipesForCategory, searchRecipes,singleRecipe };
+const addRecipe = (recipe) => {
+  return fetch(
+    `https://localhost:44372/recipe/add`,
+    {
+      method: "POST",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify(recipe)
+    }
+  )
+    .then((response) => response.json())
+    .catch((err) => console.log(err));
+};
+export { listRecipesForCategory, searchRecipes,singleRecipe,addRecipe };

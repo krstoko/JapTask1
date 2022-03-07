@@ -1,6 +1,6 @@
 const listCategories = (displeyedCategories, pageSize) => {
   return fetch(
-    `https://localhost:44372/category/GetCategories?displeyedCategories=${displeyedCategories}&pageSize=${pageSize}`,
+    `https://localhost:44372/category/getLoadMoreCategories?displeyedCategories=${displeyedCategories}&pageSize=${pageSize}`,
     {
       method: "GET",
     }

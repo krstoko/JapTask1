@@ -6,13 +6,14 @@ import * as Yup from "yup";
 import { Form, Formik } from "formik";
 import ButtonReusable from "../../ui-component/ButtonReusable";
 import Table from "../../ui-component/Table";
+import { addRecipe } from "../../../ApiService/RecipesApi";
 const RecipeAddBody = () => {
   const ref = useRef(null);
 
   const [ingredients, setIngredients] = useState([]);
 
   const onSubmit = (values) => {
-    console.log(values);
+    addRecipe(values).then(res => console.log(res)).catch(err => console.log(err))
   };
 
   const initialValues = {
