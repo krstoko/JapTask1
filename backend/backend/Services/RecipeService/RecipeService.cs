@@ -63,14 +63,27 @@ namespace backend.Services.RecipeService
                 if (category != null)
                 {
 
-                    var dbRecipes = await _dataContext.Recipes.Where(r => r.Category.CategoryName == categoryName).ToListAsync();
-                    var allRecipes = dbRecipes.Count();
+                    var dbRecipes = await _dataContext.Recipes.Include(r => r.RecipesIngredients).Where(r => r.Category.CategoryName == categoryName).ToListAsync();
+                    var recipesDto = dbRecipes.Select(r => _mapper.Map<GetRecipeDto>(r)).ToList();
+                    var allRecipes = recipesDto.Count();
+                    for (int i = 0; i < allRecipes; i++)
+                    {
+                        for (int j = 0; j < recipesDto[i].RecipesIngredients.Count; j++)
+                        {
+                            var ingredient = await _dataContext.Ingredients.FirstOrDefaultAsync(ingredient => ingredient.Id == recipesDto[i].RecipesIngredients[j].IngredientId);
+                            var ingridientDto = _mapper.Map<GetIngredientDto>(ingredient);
+                            recipesDto[i].RecipesIngredients[j].Ingredient = ingridientDto;
+                            recipesDto[i].RecipesIngredients[j].RealIngredientPrice = CalculatePrice(ingridientDto, recipesDto[i].RecipesIngredients[j].RecipeMeasureUnit.ToString(), recipesDto[i].RecipesIngredients[j].RecipeMeasureQuantity);
+                        }
+                        recipesDto[i].Price = recipesDto[i].RecipesIngredients.Sum(ri => ri.RealIngredientPrice);
+                    }
+
                     if (allRecipes <= displeyedRecipes + pageSize)
                     {
                         response.LoadMore = false;
                         response.Message = "Cant load more";
                     }
-                    response.Data = dbRecipes.Skip(displeyedRecipes).Take(pageSize).Select(r => _mapper.Map<GetRecipeDto>(r)).ToList();
+                    response.Data = recipesDto.OrderBy(r => r.Price).Skip(displeyedRecipes).Take(pageSize).ToList();
                     response.TotalDataNumber = allRecipes;
                 }
                 else
@@ -148,8 +161,7 @@ namespace backend.Services.RecipeService
 
         private static double CalculatePrice(GetIngredientDto ingredient, string recipeMeasureUnit, int recipeMeasureQuantity)
         {
-            var unitDifference = 0;
-            double price = 0;
+            int unitDifference;
             if (recipeMeasureUnit == "Kilogram" || recipeMeasureUnit == "Liter")
             {
                 unitDifference = 1000;
@@ -163,7 +175,7 @@ namespace backend.Services.RecipeService
                 unitDifference = 100;
 
             }
-            price = ingredient.LowestMeasureUnitPrice * unitDifference * recipeMeasureQuantity;
+            double price = ingredient.LowestMeasureUnitPrice * unitDifference * recipeMeasureQuantity;
             return Math.Round(price, 2);
         }
     }

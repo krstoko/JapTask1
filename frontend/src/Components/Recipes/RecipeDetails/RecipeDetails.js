@@ -2,17 +2,10 @@ import { Divider, Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useContext } from "react";
 import RecipeContext from "../../../store/recipetDetails-content";
+import { recipeDetailsStyle } from "../../Style/RecipeDetailsStyle";
 
 const RecipeDetails = () => {
-  const style = {
-    higher: {
-      borderLeft: "5px solid #316c6b",
-      pl: 2,
-    },
-    paragraph: {
-      wordWrap: "break-word",
-    },
-  };
+ 
   const recipeDetails = useContext(RecipeContext);
   return (
     <Grid item xs={12} sm={12} md={6}>
@@ -21,28 +14,28 @@ const RecipeDetails = () => {
       </Typography>
       <Divider />
       <Box component="div" pt={3}>
-        <Typography variant="h5" sx={style.higher} gutterBottom>
+        <Typography variant="h5" sx={recipeDetailsStyle.higher} gutterBottom>
           Recipe Name:
         </Typography>
-        <Typography paragraph sx={style.paragraph} gutterBottom>
+        <Typography paragraph sx={recipeDetailsStyle.paragraph} gutterBottom>
           {recipeDetails.recipeName}
         </Typography>
-        <Typography variant="h5" sx={style.higher} gutterBottom>
+        <Typography variant="h5" sx={recipeDetailsStyle.higher} gutterBottom>
           Recipe Category:
         </Typography>
-        <Typography paragraph sx={style.paragraph} gutterBottom>
+        <Typography paragraph sx={recipeDetailsStyle.paragraph} gutterBottom>
           {recipeDetails.category.categoryName}
         </Typography>
-        <Typography variant="h5" sx={style.higher} gutterBottom>
+        <Typography variant="h5" sx={recipeDetailsStyle.higher} gutterBottom>
           Recipe Description:
         </Typography>
-        <Typography paragraph sx={style.paragraph} gutterBottom>
+        <Typography paragraph sx={recipeDetailsStyle.paragraph} gutterBottom>
          {recipeDetails.description}
         </Typography>
-        <Typography variant="h5" sx={style.higher} gutterBottom>
+        <Typography variant="h5" sx={recipeDetailsStyle.higher} gutterBottom>
           Recipe total price:
         </Typography>
-        <Typography paragraph sx={style.paragraph} gutterBottom>
+        <Typography paragraph sx={recipeDetailsStyle.paragraph} gutterBottom>
          {recipeDetails.price}$
         </Typography>
       </Box>

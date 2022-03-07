@@ -5,15 +5,18 @@ import IngredientsForm from "./IngredientsForm";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
 import ButtonReusable from "../../ui-component/ButtonReusable";
-import Table from "../../ui-component/Table";
+import Table from "../../ui-component/Table/Table";
 import { addRecipe } from "../../../ApiService/RecipesApi";
+import { recipeAddColumns } from "../../ui-component/Table/TableColumns";
 const RecipeAddBody = () => {
   const ref = useRef(null);
-
+  const columns = recipeAddColumns();
   const [ingredients, setIngredients] = useState([]);
 
   const onSubmit = (values) => {
-    addRecipe(values).then(res => console.log(res)).catch(err => console.log(err))
+    addRecipe(values)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
 
   const initialValues = {
@@ -23,7 +26,7 @@ const RecipeAddBody = () => {
     ingrediantName: "",
     measureUnit: "",
     measureQuantity: "",
-    recipeImgUrl: ""
+    recipeImgUrl: "",
   };
 
   const validationSchema = Yup.object({
@@ -33,7 +36,7 @@ const RecipeAddBody = () => {
     ingrediantName: Yup.string().required("Ingredient name is required"),
     measureUnit: Yup.string().required("Measure unit is required"),
     measureQuantity: Yup.string().required("Measure quantity is required"),
-    recipeImgUrl:  Yup.string().required("Image url is required")
+    recipeImgUrl: Yup.string().required("Image url is required"),
   });
 
   const newIngredient = () => {
@@ -44,39 +47,6 @@ const RecipeAddBody = () => {
     };
     setIngredients((prevState) => [...prevState, ingredient]);
   };
-
-
-  const columns = [
-    {
-      field: "id",
-      headerName: "ID",
-      width: 90,
-      headerAlign: "center",
-      align: "center",
-      hide: true,
-    },
-    {
-      field: "name",
-      headerName: "Ingredient name",
-      width: 150,
-      flex: 1,
-    },
-    {
-      field: "quantity",
-      headerName: "Unit quantity",
-      type: "number",
-      width: 120,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "measureUnit",
-      headerName: "Measure Unit",
-      width: 120,
-      headerAlign: "center",
-      align: "center",
-    },
-  ];
 
   const rows = ingredients.map((ingredient, id) => {
     return {

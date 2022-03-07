@@ -1,47 +1,10 @@
 import { Divider, Grid, Typography } from "@mui/material";
 import React, { useContext } from "react";
 import RecipeContext from "../../../store/recipetDetails-content";
-import Table from "../../ui-component/Table";
-
+import Table from "../../ui-component/Table/Table";
+import { recipeColumns } from "../../ui-component/Table/TableColumns";
 const RecipeIngredients = () => {
-  const columns = [
-    {
-      field: "id",
-      headerName: "ID",
-      width: 90,
-      headerAlign: "center",
-      align: "center",
-      hide: true
-    },
-    {
-      field: "name",
-      headerName: "Ingredient name",
-      width: 150,
-      flex: 1,
-    },
-    {
-      field: "quantity",
-      headerName: "Unit quantity",
-      type: "number",
-      width: 120,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "measureUnit",
-      headerName: "Measure Unit",
-      width: 120,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "price",
-      headerName: "Price",
-      width: 110,
-      headerAlign: "center",
-      align: "center",
-    },
-  ];
+  
 
   const recipeDetails = useContext(RecipeContext);
 
@@ -59,7 +22,7 @@ const RecipeIngredients = () => {
     <Grid item xs={12} sm={12} md={6} >
       <Typography variant="h5" align="center">Recipe Ingredients</Typography>
       <Divider />
-      <Table rows={rows} columns={columns}/>
+      <Table rows={rows} columns={recipeColumns}/>
     </Grid>
   );
 };

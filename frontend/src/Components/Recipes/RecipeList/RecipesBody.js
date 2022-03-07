@@ -8,13 +8,14 @@ import {
   searchRecipes,
 } from "../../../ApiService/RecipesApi";
 import { useParams } from "react-router-dom";
+import { recipesBodyStyle } from "../../Style/RecipesBodyStyle";
 const RecipesBody = () => {
   const { categorieName } = useParams();
   const [loadMore, setLoadMore] = useState(true);
   const [recipes, setRecipes] = useState([]);
   const [totalAvailableRecipes, setTotalAvailableRecipes] = useState(0);
   const [searchValue, setSearchValue] = useState("");
-  
+
   const onChangeHandler = (e) => {
     setSearchValue(e.target.value);
     if (e.target.value.length < 3) {
@@ -67,12 +68,7 @@ const RecipesBody = () => {
 
   return (
     <React.Fragment>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        sx={{ width: "100%" }}
-        mt={2}
-      >
+      <Box sx={recipesBodyStyle}>
         <Typography variant="h5">
           Total recipes: {totalAvailableRecipes}
         </Typography>

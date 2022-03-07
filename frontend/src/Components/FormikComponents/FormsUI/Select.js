@@ -30,7 +30,7 @@ const Select = ({ name, options, ...rest }) => {
     <TextField autoComplete="off" margin="normal" {...configSelect}>
       {options.map((item) => {
         return (
-          <MenuItem key={item.id} value={item.id}>
+          <MenuItem key={item.id} value={item.name}>
             {item.name}
           </MenuItem>
         );

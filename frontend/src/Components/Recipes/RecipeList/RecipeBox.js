@@ -1,17 +1,13 @@
 import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-
+import { boxStyle } from "../../Style/RecipeBoxStyle";
 const RecipeBox = ({recipe}) => {
     const navigate = useNavigate()
-    const style = {
-        display: "flex",
-        justifyContent: "space-between"
-    }
+
     const onRecipeClick = () =>{
         navigate(`/recipe/${recipe.id}`)
     }
-
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Card>
@@ -22,7 +18,7 @@ const RecipeBox = ({recipe}) => {
           image={recipe.recipeImgUrl}
           alt="green iguana"
         />
-        <CardContent sx={style}>
+        <CardContent sx={boxStyle}>
           <Typography gutterBottom variant="h5" component="div">
             {recipe.recipeName}
           </Typography>

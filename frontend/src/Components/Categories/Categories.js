@@ -11,9 +11,7 @@ const Categories = () => {
   const [categories, setCategories] = useState([]);
 
   const addingNewCategories = (response) => {
-    if (!response.loadMore) {
-      setLoadMore(false);
-    }
+    setLoadMore(response.loadMore);
     setCategories((prevState) => [...prevState, ...response.data]);
   };
 
