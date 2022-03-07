@@ -1,4 +1,7 @@
 ﻿using backend.Dtos.Category;
+using backend.Dtos.RecipeIngredients;
+using backend.Models;
+using System.Collections.Generic;
 
 namespace backend.Dtos.Recipe
 {
@@ -9,6 +12,7 @@ namespace backend.Dtos.Recipe
         public string Description { get; set; }
         public string RecipeImgUrl { get; set; }
         public GetCategoryDto Category { get; set; }
-        public int Price { get; set; }
+        public double Price { get; set; }
+        public List<GetRecipeIngredientsDto> RecipesIngredients { get; set; }
     }
 }

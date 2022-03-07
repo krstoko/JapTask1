@@ -5,11 +5,11 @@ namespace backend.Models
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum MeasureUnit
     {
-        Kg,
-        G,
-        Dag,
-        L,
-        Dal,
-        ML
+        Kilogram,
+        Gram,
+        Decigram,
+        Liter,
+        Deciliter,
+        Mililiter
     }
 }

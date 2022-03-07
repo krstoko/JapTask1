@@ -20,7 +20,7 @@ const RecipesBody = () => {
     if (e.target.value.length < 3) {
       getInitialRecipes("search");
     } else {
-      searchRecipes(categorieName, e.target.value, 0, 2)
+      searchRecipes(categorieName, e.target.value, 0, 9)
         .then((res) => {
           addingNewRecipes(res, "search");
         })
@@ -30,7 +30,7 @@ const RecipesBody = () => {
 
   const getInitialRecipes = useCallback(
     (type) => {
-      listRecipesForCategory(categorieName, 0, 2)
+      listRecipesForCategory(categorieName, 0, 9)
         .then((res) => addingNewRecipes(res, type))
         .catch((err) => console.log(err));
     },

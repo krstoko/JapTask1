@@ -33,17 +33,21 @@ namespace backend.Data
                 new Category { Id = 18, CategoryName = "Lunch", CategoryImgUrl = "https://img.taste.com.au/sv9d9AM6/w720-h480-cfill-q80/taste/2016/11/pork-and-bean-burrito-bowl-109208-1.jpeg", CreatedDate = new DateTime(2000, 3, 1, 7, 47, 0) }
             );
             modelBuilder.Entity<Ingredient>().HasData(
-                new Ingredient { Id = 1, IngredientName = "Ulje", MeasureUnit = MeasureUnit.L, MeasureQuantity = 1, Price = 1.5, LowestMeasureUnitPrice = 0.0015 },
-                new Ingredient { Id = 2, IngredientName = "Mlijeko", MeasureUnit = MeasureUnit.L, MeasureQuantity = 1, Price = 0.8, LowestMeasureUnitPrice = 0.0008 },
-                new Ingredient { Id = 3, IngredientName = "Voda", MeasureUnit = MeasureUnit.L, MeasureQuantity = 1, Price = 1, LowestMeasureUnitPrice = 0.0010 },
-                new Ingredient { Id = 4, IngredientName = "Brasno", MeasureUnit = MeasureUnit.Kg, MeasureQuantity = 1, Price = 2, LowestMeasureUnitPrice = 0.0020 },
-                new Ingredient { Id = 5, IngredientName = "Mljeveno meso", MeasureUnit = MeasureUnit.Kg, MeasureQuantity = 1, Price = 3, LowestMeasureUnitPrice = 0.0030 },
-                new Ingredient { Id = 6, IngredientName = "Tjestenina", MeasureUnit = MeasureUnit.Kg, MeasureQuantity = 1, Price = 2.3, LowestMeasureUnitPrice = 0.0023 }
+                new Ingredient { Id = 1, IngredientName = "Ulje", MeasureUnit = MeasureUnit.Liter, MeasureQuantity = 1, Price = 1.5, LowestMeasureUnitPrice = 0.0015 },
+                new Ingredient { Id = 2, IngredientName = "Mlijeko", MeasureUnit = MeasureUnit.Liter, MeasureQuantity = 1, Price = 0.8, LowestMeasureUnitPrice = 0.0008 },
+                new Ingredient { Id = 3, IngredientName = "Voda", MeasureUnit = MeasureUnit.Liter, MeasureQuantity = 1, Price = 1, LowestMeasureUnitPrice = 0.0010 },
+                new Ingredient { Id = 4, IngredientName = "Brasno", MeasureUnit = MeasureUnit.Kilogram, MeasureQuantity = 1, Price = 2, LowestMeasureUnitPrice = 0.0020 },
+                new Ingredient { Id = 5, IngredientName = "Mljeveno meso", MeasureUnit = MeasureUnit.Kilogram, MeasureQuantity = 1, Price = 3, LowestMeasureUnitPrice = 0.0030 },
+                new Ingredient { Id = 6, IngredientName = "Tjestenina", MeasureUnit = MeasureUnit.Kilogram, MeasureQuantity = 1, Price = 2.3, LowestMeasureUnitPrice = 0.0023 }
                 );
+            modelBuilder.Entity<RecipesIngredients>()
+               .HasKey(ri => new { ri.IngredientId, ri.RecipeId });
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
+        public DbSet<RecipesIngredients> RecipeIngredients { get; set; }
+
     }
 }

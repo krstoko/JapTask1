@@ -10,6 +10,11 @@ export const RecipeDetailsContextProvider = (props) => {
     category: {
       categoryName: "",
     },
+    recipesIngredients: [
+      {
+        ingredient: {},
+      },
+    ],
   });
   const { recipeId } = useParams();
 

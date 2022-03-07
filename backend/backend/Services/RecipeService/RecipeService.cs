@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using backend.Data;
+using backend.Dtos.Ingredient;
 using backend.Dtos.Recipe;
+using backend.Dtos.RecipeIngredients;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -110,28 +112,59 @@ namespace backend.Services.RecipeService
                     response.Success = false;
                     response.Message = "Category Not Found";
                 }
-
             }
             catch (Exception ex)
             {
                 response.Success = false;
                 response.Message = ex.Message;
             }
-
             return response;
         }
 
         public async Task<ServiceResponse<GetRecipeDto>> GetSingleRecipe(int recipeId)
         {
             var response = new ServiceResponse<GetRecipeDto>();
-            var recipe = await _dataContext.Recipes.Include(r => r.Category).FirstOrDefaultAsync(r => r.Id == recipeId);
+
+            var recipe = await _dataContext.Recipes.Include(r => r.Category).Include(r => r.RecipesIngredients).FirstOrDefaultAsync(r => r.Id == recipeId);
+            var recipeDto = _mapper.Map<GetRecipeDto>(recipe);
+
+            for (int i = 0; i < recipeDto.RecipesIngredients.Count; i++)
+            {
+                var ingredient = await _dataContext.Ingredients.FirstOrDefaultAsync(ingredient => ingredient.Id == recipe.RecipesIngredients[i].IngredientId);
+                var ingridientDto = _mapper.Map<GetIngredientDto>(ingredient);
+                recipeDto.RecipesIngredients[i].Ingredient = ingridientDto;
+                recipeDto.RecipesIngredients[i].RealIngredientPrice = CalculatePrice(ingridientDto, recipeDto.RecipesIngredients[i].RecipeMeasureUnit.ToString(), recipeDto.RecipesIngredients[i].RecipeMeasureQuantity);
+            }
+            recipeDto.Price = recipeDto.RecipesIngredients.Sum(ri => ri.RealIngredientPrice);
             if (recipe == null)
             {
                 response.Success = false;
                 response.Message = "No recipe with that Id";
             }
-            response.Data = _mapper.Map<GetRecipeDto>(recipe);
+
+            response.Data = recipeDto;
             return response;
+        }
+
+        private static double CalculatePrice(GetIngredientDto ingredient, string recipeMeasureUnit, int recipeMeasureQuantity)
+        {
+            var unitDifference = 0;
+            double price = 0;
+            if (recipeMeasureUnit == "Kilogram" || recipeMeasureUnit == "Liter")
+            {
+                unitDifference = 1000;
+            }
+            else if (recipeMeasureUnit == "Gram" || recipeMeasureUnit == "Mililiter")
+            {
+                unitDifference = 1;
+            }
+            else
+            {
+                unitDifference = 100;
+
+            }
+            price = ingredient.LowestMeasureUnitPrice * unitDifference * recipeMeasureQuantity;
+            return Math.Round(price, 2);
         }
     }
 }

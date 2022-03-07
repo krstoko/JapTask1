@@ -14,7 +14,6 @@ const RecipeDetails = () => {
     },
   };
   const recipeDetails = useContext(RecipeContext);
-  console.log(recipeDetails)
   return (
     <Grid item xs={12} sm={12} md={6}>
       <Typography variant="h5" align="center">
@@ -39,6 +38,12 @@ const RecipeDetails = () => {
         </Typography>
         <Typography paragraph sx={style.paragraph} gutterBottom>
          {recipeDetails.description}
+        </Typography>
+        <Typography variant="h5" sx={style.higher} gutterBottom>
+          Recipe total price:
+        </Typography>
+        <Typography paragraph sx={style.paragraph} gutterBottom>
+         {recipeDetails.price}$
         </Typography>
       </Box>
     </Grid>

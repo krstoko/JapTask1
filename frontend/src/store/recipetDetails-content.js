@@ -1,10 +1,15 @@
-import React from "react"
+import React from "react";
 const RecipeContext = React.createContext({
-    recipeName: "",
-    description: "",
-    category: {
-        categoryName: ""
-    }
-})
+  recipeName: "",
+  description: "",
+  category: {
+    categoryName: "",
+  },
+  recipesIngredients: [
+    {
+      ingredient: {},
+    },
+  ],
+});
 
 export default RecipeContext;

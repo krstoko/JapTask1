@@ -1,5 +1,6 @@
 import { Divider, Grid, Typography } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
+import RecipeContext from "../../../store/recipetDetails-content";
 import Table from "../../ui-component/Table";
 
 const RecipeIngredients = () => {
@@ -41,15 +42,18 @@ const RecipeIngredients = () => {
       align: "center",
     },
   ];
-  
-  const rows = [
-    { id: 1, name: "Ulje", quantity: 200, measureUnit: "gram", price: 200 },
-    { id: 2, name: "Ulje", quantity: 200, measureUnit: "gram", price: 200 },
-    { id: 3, name: "Ulje", quantity: 200, measureUnit: "gram", price: 200 },
-    { id: 4, name: "Ulje", quantity: 200, measureUnit: "gram", price: 200 },
-    { id: 5, name: "Ulje", quantity: 200, measureUnit: "gram", price: 200 },
-    { id: 6, name: "Ulje", quantity: 200, measureUnit: "gram", price: 200 },
-  ];
+
+  const recipeDetails = useContext(RecipeContext);
+
+  const rows = recipeDetails.recipesIngredients.map((ingredient, id) => {
+    return {
+      id: id + 1,
+      name: ingredient.ingredient.ingredientName,
+      quantity: ingredient.recipeMeasureQuantity,
+      measureUnit: ingredient.recipeMeasureUnit,
+      price: ingredient.realIngredientPrice + "$"
+    };
+  });
   
   return (
     <Grid item xs={12} sm={12} md={6} >
