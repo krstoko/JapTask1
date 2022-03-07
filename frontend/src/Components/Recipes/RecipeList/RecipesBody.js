@@ -1,49 +1,91 @@
 import { Box, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import SearchBar from "../../ui-component/SearchBar";
 import RecipeList from "./RecipeList";
 import ButtonReusable from "../../ui-component/ButtonReusable";
-import { listRecipesForCategory } from "../../../ApiService/RecipesApi";
+import {
+  listRecipesForCategory,
+  searchRecipes,
+} from "../../../ApiService/RecipesApi";
 import { useParams } from "react-router-dom";
 const RecipesBody = () => {
   const { categorieName } = useParams();
   const [loadMore, setLoadMore] = useState(true);
   const [recipes, setRecipes] = useState([]);
-  const [totalAvailableRecipes,setTotalAvailableRecipes] = useState(0)
-
-  const addingNewRecipes = (response) => {
-    if (!response.loadMore) {
-      setLoadMore(false);
+  const [totalAvailableRecipes, setTotalAvailableRecipes] = useState(0);
+  const [searchValue, setSearchValue] = useState("");
+  
+  const onChangeHandler = (e) => {
+    setSearchValue(e.target.value);
+    if (e.target.value.length < 3) {
+      getInitialRecipes("search");
+    } else {
+      searchRecipes(categorieName, e.target.value, 0, 2)
+        .then((res) => {
+          addingNewRecipes(res, "search");
+        })
+        .catch((err) => console.log(err));
     }
-    setTotalAvailableRecipes(response.totalDataNumber)
-    setRecipes((prevState) => [...prevState, ...response.data]);
   };
-   
+
+  const getInitialRecipes = useCallback(
+    (type) => {
+      listRecipesForCategory(categorieName, 0, 2)
+        .then((res) => addingNewRecipes(res, type))
+        .catch((err) => console.log(err));
+    },
+    [categorieName]
+  );
+
+  const addingNewRecipes = (response, type) => {
+    if (type === "search") {
+      setRecipes(response.data);
+    } else {
+      setRecipes((prevState) => [...prevState, ...response.data]);
+    }
+    setTotalAvailableRecipes(response.totalDataNumber);
+    setLoadMore(response.loadMore);
+  };
 
   const onClickMoreHandler = () => {
-    listRecipesForCategory(categorieName, recipes.length, 1)
-      .then((res) => addingNewRecipes(res))
-      .catch((err) => console.log(err));
+    if (searchValue.length > 2) {
+      searchRecipes(categorieName, searchValue, recipes.length, 2)
+        .then((res) => {
+          addingNewRecipes(res);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      listRecipesForCategory(categorieName, recipes.length, 2)
+        .then((res) => addingNewRecipes(res))
+        .catch((err) => console.log(err));
+    }
   };
 
   useEffect(() => {
-    listRecipesForCategory(categorieName, 0, 1)
-      .then((res) => addingNewRecipes(res))
-      .catch((err) => console.log(err));
-  }, [categorieName]);
+    getInitialRecipes();
+  }, [getInitialRecipes]);
 
   return (
     <React.Fragment>
-      <Box display="flex" justifyContent="space-between" sx={{  width: "100%"}} mt={2}>
-        <Typography variant="h5">Total recipes: {totalAvailableRecipes}</Typography>
-        <SearchBar />
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        sx={{ width: "100%" }}
+        mt={2}
+      >
+        <Typography variant="h5">
+          Total recipes: {totalAvailableRecipes}
+        </Typography>
+        <SearchBar onChangeHandler={onChangeHandler} />
       </Box>
       <RecipeList recipes={recipes} />
-      {loadMore && <Box my={2} display="flex" justifyContent="center">
-        <ButtonReusable variant="outlined" onClick={onClickMoreHandler}>
-          Load more
-        </ButtonReusable>
-      </Box>}
+      {loadMore && (
+        <Box my={2} display="flex" justifyContent="center">
+          <ButtonReusable variant="outlined" onClick={onClickMoreHandler}>
+            Load more
+          </ButtonReusable>
+        </Box>
+      )}
     </React.Fragment>
   );
 };

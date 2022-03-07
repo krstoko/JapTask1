@@ -9,4 +9,5 @@ const listCategories = (displeyedCategories, pageSize) => {
     .catch((err) => console.log(err));
 };
 
+
 export { listCategories };
