@@ -50,6 +50,12 @@ namespace backend.Services.RecipeService
                     response.Message = "Ingredient not found";
                     return response;
                 }
+                else if (!ChackIfConverIsPossible(ingredient.MeasureUnit.ToString(), newRecipe.RecipeIngredients[i].RecipeMeasureUnit.ToString()))
+                {
+                    response.Message = "Looks like you tried to convert " + ingredient.MeasureUnit.ToString() + " , into " + newRecipe.RecipeIngredients[i].RecipeMeasureUnit.ToString() + " but that is impossible!";
+                    response.Success = false;
+                    return response;
+                }
                 else
                 {
                     RecipesIngredients recipeIngredient = new()
@@ -119,7 +125,8 @@ namespace backend.Services.RecipeService
             Category category = await _dataContext.Categories.FirstOrDefaultAsync(c => c.CategoryName == categoryName);
             if (category != null)
             {
-                var dbRecipes = await _dataContext.Recipes.Include(r => r.RecipesIngredients).Where(r => r.Category.CategoryName == categoryName && r.RecipeName.Contains(searchValue)).ToListAsync();
+                var dbRecipes = await _dataContext.Recipes.Include(r => r.RecipesIngredients)
+                    .Where(r => r.Category.CategoryName == categoryName && (r.RecipeName.Contains(searchValue) || r.RecipesIngredients.Any(ri => ri.Ingredient.IngredientName.Contains(searchValue)))).ToListAsync();
                 var recipesDto = dbRecipes.Select(r => _mapper.Map<GetRecipeDto>(r)).ToList();
                 var allRecipes = recipesDto.Count;
                 for (int i = 0; i < allRecipes; i++)
@@ -177,6 +184,20 @@ namespace backend.Services.RecipeService
             }
             double price = ingredient.LowestMeasureUnitPrice * unitDifference * recipeMeasureQuantity;
             return Math.Round(price, 2);
+        }
+        private static bool ChackIfConverIsPossible(string realIngrediantMeasureUnit, string recipeIngrediantMeasureUnit)
+        {
+            if ((realIngrediantMeasureUnit == "Kilogram" || realIngrediantMeasureUnit == "Decigram" || realIngrediantMeasureUnit == "Gram")
+                && (recipeIngrediantMeasureUnit == "Liter" || recipeIngrediantMeasureUnit == "Deciliter" || recipeIngrediantMeasureUnit == "Mililiter"))
+            {
+                return false;
+            }
+            else if ((realIngrediantMeasureUnit == "Liter" || realIngrediantMeasureUnit == "Deciliter" || realIngrediantMeasureUnit == "Mililiter")
+                && (recipeIngrediantMeasureUnit == "Kilogram" || recipeIngrediantMeasureUnit == "Decigram" || recipeIngrediantMeasureUnit == "Gram"))
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

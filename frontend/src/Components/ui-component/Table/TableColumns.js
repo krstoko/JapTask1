@@ -1,3 +1,5 @@
+import ButtonReusable from "../ButtonReusable";
+
 export const recipeColumns = [
   {
     field: "id",
@@ -37,7 +39,7 @@ export const recipeColumns = [
   },
 ];
 
-export const recipeAddColumns = () => {
+export const recipeAddColumns = (onDeleteClick) => {
   return [
     {
       field: "id",
@@ -67,6 +69,23 @@ export const recipeAddColumns = () => {
       width: 120,
       headerAlign: "center",
       align: "center",
+    },
+    {
+      field: "add",
+      headerName: "Action",
+      width: 180,
+      headerAlign: "center",
+      sortable: false,
+      align: "center",
+
+      renderCell: (params) => (
+        <ButtonReusable
+          variant="contained"
+          onClick={() => onDeleteClick(params)}
+        >
+          Delete
+        </ButtonReusable>
+      ),
     },
   ];
 };

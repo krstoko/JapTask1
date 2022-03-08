@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace backend.Controllers
 {
-
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class RecipeController : ControllerBase
@@ -52,12 +52,7 @@ namespace backend.Controllers
         [HttpPost("Add")]
         public async Task<ActionResult<ServiceResponse<GetRecipeDto>>> AddRecipe(AddRecipeDto newRecipe)
         {
-            var result = await _recipeService.AddRecipe(newRecipe);
-            if (result.Success == false)
-            {
-                return BadRequest(result);
-            }
-            return Ok(result);
+            return Ok(await _recipeService.AddRecipe(newRecipe));
         }
     }
 }

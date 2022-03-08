@@ -10,7 +10,14 @@ import MyModal from "../../ui-component/MyModal";
 import SnackbarComponent from "../../ui-component/Snackbar";
 const RecipeAddBody = () => {
   const detailsFormRef = useRef(null);
-  const columns = recipeAddColumns();
+
+  const removeIngredient = (ingredientDetails) => {
+    setIngredients((prevState) => prevState.filter((ingredient,index) => index + 1 !== ingredientDetails.id))
+  };
+
+  const columns = recipeAddColumns(removeIngredient);
+
+ 
   const [openModal, setOpenModal] = useState({ open: false, message: "" });
   const [successSnackbar, setSuccessSnackbar] = useState({
     open: false,
@@ -38,26 +45,35 @@ const RecipeAddBody = () => {
   const addRecipeCall = (recipe) => {
     recipe = { ...recipe, recipeIngredients: ingredients };
     addRecipe(recipe, (responseData) => {
-      if (responseData && responseData.success) {
+      if (responseData && responseData.data) {
         setIngredients([]);
         setSuccessSnackbar({
           open: true,
           message: "Successfuly created recipe",
         });
+      } else {
+        settingErrorState(true, responseData.message);
       }
     });
   };
   const onClickHandler = () => {
     if (ingredients.length === 0) {
-      setOpenModal({
-        open: true,
-        message:
-          "Looks like you tried to add recipe without ingrediants.Please try again with at least one ingredient",
-      });
+      settingErrorState(
+        true,
+        "Looks like you tried to add recipe without ingrediants.Please try again with at least one ingredient"
+      );
     } else {
       detailsFormRef.current.handleSubmit();
     }
   };
+
+  const settingErrorState = (open, message) => {
+    setOpenModal({
+      open: open,
+      message: message,
+    });
+  };
+
   const handleClose = () => setSuccessSnackbar({ open: false, message: "" });
 
   return (
@@ -66,7 +82,7 @@ const RecipeAddBody = () => {
         title={"Error happaned"}
         message={openModal.message}
         openModal={openModal.open}
-        closeModal={() => setOpenModal(false)}
+        closeModal={() => setOpenModal({ open: false, message: "" })}
       />
       <SnackbarComponent
         open={successSnackbar.open}
