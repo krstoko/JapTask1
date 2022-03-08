@@ -22,7 +22,7 @@ export const RecipeDetailsContextProvider = (props) => {
     singleRecipe(recipeId)
       .then((res) => setData(res.data))
       .catch((err) => console.log(err));
-  }, []);
+  }, [recipeId]);
 
   return (
     <RecipeContext.Provider value={data}>

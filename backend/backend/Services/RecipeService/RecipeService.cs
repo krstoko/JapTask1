@@ -65,17 +65,10 @@ namespace backend.Services.RecipeService
 
                     var dbRecipes = await _dataContext.Recipes.Include(r => r.RecipesIngredients).Where(r => r.Category.CategoryName == categoryName).ToListAsync();
                     var recipesDto = dbRecipes.Select(r => _mapper.Map<GetRecipeDto>(r)).ToList();
-                    var allRecipes = recipesDto.Count();
+                    var allRecipes = recipesDto.Count;
                     for (int i = 0; i < allRecipes; i++)
                     {
-                        for (int j = 0; j < recipesDto[i].RecipesIngredients.Count; j++)
-                        {
-                            var ingredient = await _dataContext.Ingredients.FirstOrDefaultAsync(ingredient => ingredient.Id == recipesDto[i].RecipesIngredients[j].IngredientId);
-                            var ingridientDto = _mapper.Map<GetIngredientDto>(ingredient);
-                            recipesDto[i].RecipesIngredients[j].Ingredient = ingridientDto;
-                            recipesDto[i].RecipesIngredients[j].RealIngredientPrice = CalculatePrice(ingridientDto, recipesDto[i].RecipesIngredients[j].RecipeMeasureUnit.ToString(), recipesDto[i].RecipesIngredients[j].RecipeMeasureQuantity);
-                        }
-                        recipesDto[i].Price = recipesDto[i].RecipesIngredients.Sum(ri => ri.RealIngredientPrice);
+                        await AddingIngredientAndPricing(recipesDto[i]);
                     }
 
                     if (allRecipes <= displeyedRecipes + pageSize)
@@ -102,6 +95,18 @@ namespace backend.Services.RecipeService
             return response;
         }
 
+        private async Task AddingIngredientAndPricing(GetRecipeDto recipeDto)
+        {
+            for (int i = 0; i < recipeDto.RecipesIngredients.Count; i++)
+            {
+                var ingredient = await _dataContext.Ingredients.FirstOrDefaultAsync(ingredient => ingredient.Id == recipeDto.RecipesIngredients[i].IngredientId);
+                var ingridientDto = _mapper.Map<GetIngredientDto>(ingredient);
+                recipeDto.RecipesIngredients[i].Ingredient = ingridientDto;
+                recipeDto.RecipesIngredients[i].RealIngredientPrice = CalculatePrice(ingridientDto, recipeDto.RecipesIngredients[i].RecipeMeasureUnit.ToString(), recipeDto.RecipesIngredients[i].RecipeMeasureQuantity);
+            }
+            recipeDto.Price = recipeDto.RecipesIngredients.Sum(ri => ri.RealIngredientPrice);
+        }
+
         public async Task<ServiceResponse<List<GetRecipeDto>>> GetSearchRecipes(string categoryName, string searchValue, int displeyedRecipes, int pageSize)
         {
             var response = new ServiceResponse<List<GetRecipeDto>>();
@@ -110,14 +115,20 @@ namespace backend.Services.RecipeService
                 Category category = await _dataContext.Categories.FirstOrDefaultAsync(c => c.CategoryName == categoryName);
                 if (category != null)
                 {
-                    var dbRecipes = await _dataContext.Recipes.Where(r => r.Category.CategoryName == categoryName && r.RecipeName.Contains(searchValue)).ToListAsync();
-                    var allRecipes = dbRecipes.Count();
+                    var dbRecipes = await _dataContext.Recipes.Include(r => r.RecipesIngredients).Where(r => r.Category.CategoryName == categoryName && r.RecipeName.Contains(searchValue)).ToListAsync();
+                    var recipesDto = dbRecipes.Select(r => _mapper.Map<GetRecipeDto>(r)).ToList();
+                    var allRecipes = recipesDto.Count;
+                    for (int i = 0; i < allRecipes; i++)
+                    {
+                        await AddingIngredientAndPricing(recipesDto[i]);
+                    }
+
                     if (allRecipes <= displeyedRecipes + pageSize)
                     {
                         response.LoadMore = false;
                         response.Message = "Cant load more";
                     }
-                    response.Data = dbRecipes.Skip(displeyedRecipes).Take(pageSize).Select(r => _mapper.Map<GetRecipeDto>(r)).ToList();
+                    response.Data = recipesDto.OrderBy(r => r.Price).Skip(displeyedRecipes).Take(pageSize).ToList();
                     response.TotalDataNumber = allRecipes;
                 }
                 else
@@ -140,15 +151,7 @@ namespace backend.Services.RecipeService
 
             var recipe = await _dataContext.Recipes.Include(r => r.Category).Include(r => r.RecipesIngredients).FirstOrDefaultAsync(r => r.Id == recipeId);
             var recipeDto = _mapper.Map<GetRecipeDto>(recipe);
-
-            for (int i = 0; i < recipeDto.RecipesIngredients.Count; i++)
-            {
-                var ingredient = await _dataContext.Ingredients.FirstOrDefaultAsync(ingredient => ingredient.Id == recipe.RecipesIngredients[i].IngredientId);
-                var ingridientDto = _mapper.Map<GetIngredientDto>(ingredient);
-                recipeDto.RecipesIngredients[i].Ingredient = ingridientDto;
-                recipeDto.RecipesIngredients[i].RealIngredientPrice = CalculatePrice(ingridientDto, recipeDto.RecipesIngredients[i].RecipeMeasureUnit.ToString(), recipeDto.RecipesIngredients[i].RecipeMeasureQuantity);
-            }
-            recipeDto.Price = recipeDto.RecipesIngredients.Sum(ri => ri.RealIngredientPrice);
+            await AddingIngredientAndPricing(recipeDto);
             if (recipe == null)
             {
                 response.Success = false;

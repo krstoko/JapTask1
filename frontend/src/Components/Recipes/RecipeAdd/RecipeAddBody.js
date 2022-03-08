@@ -2,50 +2,24 @@ import { Grid, Typography } from "@mui/material";
 import React, { useRef, useState } from "react";
 import DetailsForm from "./DetailsForm";
 import IngredientsForm from "./IngredientsForm";
-import * as Yup from "yup";
-import { Form, Formik } from "formik";
 import ButtonReusable from "../../ui-component/ButtonReusable";
 import Table from "../../ui-component/Table/Table";
-import { addRecipe } from "../../../ApiService/RecipesApi";
 import { recipeAddColumns } from "../../ui-component/Table/TableColumns";
+import { addRecipe } from "../../../ApiService/RecipesApi";
+import MyModal from "../../ui-component/MyModal";
 const RecipeAddBody = () => {
-  const ref = useRef(null);
+  const detailsFormRef = useRef(null);
   const columns = recipeAddColumns();
+  const [openModal, setOpenModal] = useState(false);
   const [ingredients, setIngredients] = useState([]);
 
-  const onSubmit = (values) => {
-    addRecipe(values)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  };
-
-  const initialValues = {
-    recipeName: "",
-    categorie: "",
-    description: "",
-    ingrediantName: "",
-    measureUnit: "",
-    measureQuantity: "",
-    recipeImgUrl: "",
-  };
-
-  const validationSchema = Yup.object({
-    recipeName: Yup.string().required("Recipe name is required"),
-    categorie: Yup.string().required("Category is required"),
-    description: Yup.string().required("Description is required"),
-    ingrediantName: Yup.string().required("Ingredient name is required"),
-    measureUnit: Yup.string().required("Measure unit is required"),
-    measureQuantity: Yup.string().required("Measure quantity is required"),
-    recipeImgUrl: Yup.string().required("Image url is required"),
-  });
-
-  const newIngredient = () => {
-    let ingredient = {
-      name: ref.current.values.ingrediantName,
-      measureUnit: ref.current.values.measureUnit,
-      quantity: ref.current.values.measureQuantity,
+  const newIngredient = (ingredient) => {
+    let ingredientBody = {
+      name: ingredient.ingrediantName,
+      measureUnit: ingredient.measureUnit,
+      quantity: ingredient.measureQuantity,
     };
-    setIngredients((prevState) => [...prevState, ingredient]);
+    setIngredients((prevState) => [...prevState, ingredientBody]);
   };
 
   const rows = ingredients.map((ingredient, id) => {
@@ -56,35 +30,49 @@ const RecipeAddBody = () => {
       measureUnit: ingredient.measureUnit,
     };
   });
+  const addRecipeCall = (recipe) => {
+    addRecipe(recipe).then((res) => {
+      setIngredients([])
+    });
+  };
+  const onClickHandler = () => {
+    if (ingredients.length === 0) {
+      setOpenModal(true);
+    } else {
+      detailsFormRef.current.handleSubmit();
+    }
+  };
 
   return (
     <React.Fragment>
+      <MyModal
+        title={"Error happaned"}
+        message={
+          "Looks like you tried to add recipe without ingrediants.Please try again with at least one ingredient"
+        }
+        openModal={openModal}
+        closeModal={() => setOpenModal(false)}
+      />
       <Typography variant="h3" align="center" mt={4}>
         Add new Recipe
       </Typography>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={(values) => {
-          onSubmit(values);
-        }}
-        innerRef={ref}
+      <Grid container spacing={5} mt>
+        <Grid item xs={12} sm={6}>
+          <DetailsForm ref={detailsFormRef} addRecipe={addRecipeCall} />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <IngredientsForm newIngredient={newIngredient} />
+        </Grid>
+      </Grid>
+      <Table rows={rows} columns={columns} />
+      <ButtonReusable
+        type="button"
+        onClick={onClickHandler}
+        fullWidth
+        variant="contained"
       >
-        <Form>
-          <Grid container spacing={5} mt>
-            <Grid item xs={12} sm={6}>
-              <DetailsForm />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <IngredientsForm newIngredient={newIngredient} />
-            </Grid>
-          </Grid>
-          <Table rows={rows} columns={columns} />
-          <ButtonReusable type="submit" fullWidth variant="contained">
-            Add recipe
-          </ButtonReusable>
-        </Form>
-      </Formik>
+        Add recipe
+      </ButtonReusable>
     </React.Fragment>
   );
 };

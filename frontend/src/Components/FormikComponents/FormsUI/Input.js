@@ -10,11 +10,11 @@ const Input = ({ name, errors, ...rest }) => {
     ...rest,
     fullWidth: true,
   };
-
+  
   if (mata && mata.touched && mata.error) {
     configTextField.error = true;
     configTextField.helperText = mata.error;
-  } else if (errors.isError) {
+  } else if (errors && errors.isError) {
     configTextField.error = true;
     configTextField.helperText = errors.message;
   }

@@ -4,14 +4,14 @@ const authenticate = (jwt) => {
     sessionStorage.setItem("jwt", jwt);
   }
 };
-const isAuthentcated = () => {
+const isAuthenticated = () => {
   if (typeof window == "undefined") return false;
-  let getToken = JSON.parse(sessionStorage.getItem("jwt"));
+  let getToken = sessionStorage.getItem("jwt");
 
   if (!getToken) {
     return false;
   }
-  return false;
+  return true;
 };
 
-export { authenticate, isAuthentcated };
+export { authenticate, isAuthenticated };
