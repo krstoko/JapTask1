@@ -1,11 +1,13 @@
-const login = (credentials) => {
-  return fetch(`https://localhost:44372/Auth/Login`, {
-    method: "POST",
-    headers: { Accept: "application/json", "Content-Type": "application/json" },
-    body: JSON.stringify(credentials),
-  })
-    .then((response) => response.json())
-    .catch((err) => console.log(err));
+import api from "./AxiosConfigure";
+
+const login = (credentials, cb) => {
+  api
+    .post("/auth/login", credentials)
+    .then((response) => cb(response.data))
+    .catch((err) => {
+      console.log(err);
+      cb(false);
+    });
 };
 
 export { login };

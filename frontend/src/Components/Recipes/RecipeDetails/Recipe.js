@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ContainerPaper from "../../ui-component/ContainerPaper";
 import Header from "../../ui-component/Header";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import RecipeBody from "./RecipeBody";
-import { singleRecipe } from "../../../ApiService/RecipesApi";
-import RecipeContext from "../../../store/recipetDetails-content";
 import { RecipeDetailsContextProvider } from "../../../store/RecipeDetailsContextProvider";
 
 const Recipe = () => {

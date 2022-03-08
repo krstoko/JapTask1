@@ -19,9 +19,9 @@ export const RecipeDetailsContextProvider = (props) => {
   const { recipeId } = useParams();
 
   useEffect(() => {
-    singleRecipe(recipeId)
-      .then((res) => setData(res.data))
-      .catch((err) => console.log(err));
+    singleRecipe(recipeId, (responseData) => {
+      if (responseData) setData(responseData.data);
+    });
   }, [recipeId]);
 
   return (

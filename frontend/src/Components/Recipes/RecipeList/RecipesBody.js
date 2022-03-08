@@ -21,19 +21,29 @@ const RecipesBody = () => {
     if (e.target.value.length < 3) {
       getInitialRecipes("search");
     } else {
-      searchRecipes(categorieName, e.target.value, 0, 9)
-        .then((res) => {
-          addingNewRecipes(res, "search");
-        })
-        .catch((err) => console.log(err));
+      searchRecipes(
+        categorieName,
+        {
+          searchValue: e.target.value,
+          displeyedRecipes: 0,
+          pageSize: 9,
+        },
+        (dataResponse) => {
+          if (dataResponse) addingNewRecipes(dataResponse, "search");
+        }
+      );
     }
   };
 
   const getInitialRecipes = useCallback(
     (type) => {
-      listRecipesForCategory(categorieName, 0, 9)
-        .then((res) => addingNewRecipes(res, type))
-        .catch((err) => console.log(err));
+      listRecipesForCategory(
+        categorieName,
+        { displeyedRecipes: 0, pageSize: 9 },
+        (responseData) => {
+          if (responseData) addingNewRecipes(responseData, type);
+        }
+      );
     },
     [categorieName]
   );
@@ -50,15 +60,25 @@ const RecipesBody = () => {
 
   const onClickMoreHandler = () => {
     if (searchValue.length > 2) {
-      searchRecipes(categorieName, searchValue, recipes.length, 2)
-        .then((res) => {
-          addingNewRecipes(res);
-        })
-        .catch((err) => console.log(err));
+      searchRecipes(
+        categorieName,
+        {
+          searchValue,
+          displeyedRecipes: recipes.length,
+          pageSize: 9,
+        },
+        (responseData) => {
+          if (responseData) addingNewRecipes(responseData);
+        }
+      );
     } else {
-      listRecipesForCategory(categorieName, recipes.length, 2)
-        .then((res) => addingNewRecipes(res))
-        .catch((err) => console.log(err));
+      listRecipesForCategory(
+        categorieName,
+        { displeyedRecipes: recipes.length, pageSize: 9 },
+        (responseData) => {
+          if (responseData) addingNewRecipes(responseData);
+        }
+      );
     }
   };
 

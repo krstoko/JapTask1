@@ -16,15 +16,15 @@ const Categories = () => {
   };
 
   const onClickHandler = () => {
-    listCategories(categories.length, 9)
-      .then((response) => addingNewCategories(response))
-      .catch((err) => console.log(err));
+    listCategories(categories.length, 9, (response) => {
+      addingNewCategories(response);
+    });
   };
 
   useEffect(() => {
-    listCategories(0, 9)
-      .then((response) => addingNewCategories(response))
-      .catch((err) => console.log(err));
+    listCategories(0, 9, (response) => {
+      addingNewCategories(response);
+    });
   }, []);
 
   return (

@@ -1,6 +1,5 @@
 const authenticate = (jwt) => {
-  if (typeof window !== "undefined") {
-    console.log(jwt);
+  if (typeof window !== "undefined") {;
     sessionStorage.setItem("jwt", jwt);
   }
 };

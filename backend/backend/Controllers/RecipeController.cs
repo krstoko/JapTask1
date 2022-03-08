@@ -1,12 +1,14 @@
 ﻿using backend.Dtos.Recipe;
 using backend.Models;
 using backend.Services.RecipeService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace backend.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class RecipeController : ControllerBase

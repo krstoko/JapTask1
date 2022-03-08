@@ -1,24 +1,27 @@
-const listCategories = (displeyedCategories, pageSize) => {
-  return fetch(
-    `https://localhost:44372/category/getLoadMoreCategories?displeyedCategories=${displeyedCategories}&pageSize=${pageSize}`,
-    {
-      method: "GET",
-    }
-  )
-    .then((response) => response.json())
-    .catch((err) => console.log(err));
+import api from "./AxiosConfigure";
+const listCategories = (displeyedCategories, pageSize, cb) => {
+  api
+    .get("/category/getLoadMoreCategories", {
+      params: {
+        displeyedCategories: displeyedCategories,
+        pageSize: pageSize,
+      },
+    })
+    .then((response) => cb(response.data))
+    .catch((err) => {
+      console.log(err);
+      cb(false);
+    });
 };
 
-const getAllCategories = () => {
-  return fetch(
-    `https://localhost:44372/category/all`,
-    {
-      method: "GET",
-    }
-  )
-    .then((response) => response.json())
-    .catch((err) => console.log(err));
+const getAllCategories = (cb) => {
+  api
+    .get("/category/all")
+    .then((response) => cb(response.data))
+    .catch((err) => {
+      console.log(err);
+      cb(false);
+    });
 };
 
-
-export { listCategories,getAllCategories };
+export { listCategories, getAllCategories };

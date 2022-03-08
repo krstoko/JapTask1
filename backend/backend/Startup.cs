@@ -30,6 +30,7 @@ namespace backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddDbContext<DataContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
@@ -75,6 +76,7 @@ namespace backend
             });
             dataContext.SeedUser();
             app.UseRouting();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

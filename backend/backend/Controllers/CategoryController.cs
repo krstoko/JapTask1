@@ -2,12 +2,14 @@
 using backend.Dtos.Category;
 using backend.Models;
 using backend.Services.CategoryService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace backend.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class CategoryController : ControllerBase

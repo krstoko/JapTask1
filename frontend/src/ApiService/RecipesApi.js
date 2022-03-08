@@ -1,49 +1,46 @@
-const listRecipesForCategory = (categoryName, displeyedRecipes, pageSize) => {
-  return fetch(
-    `https://localhost:44372/recipe/${categoryName}?displeyedRecipes=${displeyedRecipes}&pageSize=${pageSize}`,
-    {
-      method: "GET",
-    }
-  )
-    .then((response) => response.json())
-    .catch((err) => console.log(err));
+import api from "./AxiosConfigure";
+
+const listRecipesForCategory = (categoryName, data, cb) => {
+  api
+    .get(`/recipe/${categoryName}`, {
+      params: data,
+    })
+    .then((response) => cb(response.data))
+    .catch((err) => {
+      console.log(err);
+      cb(false);
+    });
 };
 
-const searchRecipes = (
-  categoryName,
-  searchValue,
-  displeyedRecipes,
-  pageSize
-) => {
-  return fetch(
-    `https://localhost:44372/recipe/search/${categoryName}?searchValue=${searchValue}&displeyedRecipes=${displeyedRecipes}&pageSize=${pageSize}`,
-    {
-      method: "GET",
-    }
-  )
-    .then((response) => response.json())
-    .catch((err) => console.log(err));
+const searchRecipes = (categoryName, data, cb) => {
+  api
+    .get(`/recipe/search/${categoryName}`, {
+      params: data,
+    })
+    .then((response) => cb(response.data))
+    .catch((err) => {
+      console.log(err);
+      cb(false);
+    });
 };
-const singleRecipe = (recipeId) => {
-  return fetch(
-    `https://localhost:44372/recipe/single/${recipeId}`,
-    {
-      method: "GET",
-    }
-  )
-    .then((response) => response.json())
-    .catch((err) => console.log(err));
+
+const singleRecipe = (recipeId, cb) => {
+
+  api
+    .get(`/recipe/single/${recipeId}`)
+    .then((response) => cb(response.data))
+    .catch((err) => {
+      console.log(err);
+      cb(false);
+    });
 };
 const addRecipe = (recipe) => {
-  return fetch(
-    `https://localhost:44372/recipe/add`,
-    {
-      method: "POST",
-      headers: { Accept: "application/json", "Content-Type": "application/json" },
-      body: JSON.stringify(recipe)
-    }
-  )
+  return fetch(`https://localhost:44372/recipe/add`, {
+    method: "POST",
+    headers: { Accept: "application/json", "Content-Type": "application/json" },
+    body: JSON.stringify(recipe),
+  })
     .then((response) => response.json())
     .catch((err) => console.log(err));
 };
-export { listRecipesForCategory, searchRecipes,singleRecipe,addRecipe };
+export { listRecipesForCategory, searchRecipes, singleRecipe, addRecipe };

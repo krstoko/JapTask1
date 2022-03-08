@@ -3,16 +3,14 @@ import { Form, Formik } from "formik";
 import React, { forwardRef, useEffect, useState } from "react";
 import { getAllCategories } from "../../../ApiService/CategoriesApi";
 import FormikControl from "../../FormikComponents/FormikControl";
-import * as Yup from "yup"
-const DetailsForm = forwardRef((props,ref) => {
+import * as Yup from "yup";
+const DetailsForm = forwardRef((props, ref) => {
   const [categories, setCategories] = useState([]);
   useEffect(() => {
-    getAllCategories()
-      .then((res) => {
-        const selectCategories = renameObjKey(res.data);
-        setCategories(selectCategories);
-      })
-      .catch((err) => console.log(err));
+    getAllCategories((responseData) => {
+      const selectCategories = renameObjKey(responseData.data);
+      setCategories(selectCategories);
+    });
   }, []);
 
   const renameObjKey = (array) => {
@@ -23,6 +21,7 @@ const DetailsForm = forwardRef((props,ref) => {
     });
     return array;
   };
+
   const initialValues = {
     recipeName: "",
     categoryName: "",
@@ -41,8 +40,8 @@ const DetailsForm = forwardRef((props,ref) => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       innerRef={ref}
-      onSubmit={(values,{resetForm})=>{
-        props.addRecipe(values)
+      onSubmit={(values, { resetForm }) => {
+        props.addRecipe(values);
         resetForm();
       }}
     >

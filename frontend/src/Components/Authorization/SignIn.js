@@ -13,16 +13,14 @@ const SignIn = () => {
   const [error, setError] = useState({ isError: false, message: "" });
   const navigate = useNavigate();
   const onSubmit = (values) => {
-    login(values)
-      .then((res) => {
-        if (!res.success) {
-          setError({ isError: true, message: res.message });
-        } else {
-          authenticate(res.data);
-          navigate("/categories");
-        }
-      })
-      .catch((err) => console.log(err));
+    login(values, (responseData) => {
+      if (!responseData) {
+        setError({ isError: true, message: "Wrong credentials" });
+      } else {
+        authenticate(responseData.data);
+        navigate("/categories");
+      }
+    });
   };
 
   const initialValues = {
