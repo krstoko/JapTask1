@@ -27,3 +27,17 @@ is to use our start command. We will do that by using `npm start`.
 
 *Please dont start frontend untill we start our backend as well*
 
+## Backend
+
+
+# Application manual
+
+First thing you will see in our application is login screen. To successfully login into application we you will need to use this credentials
+
+* Username: TestUser
+* Password: test
+
+After you login you will be redirected to page where you need to choose category for recipes you want to watch. After you do that you will be redirected to page with all recipes from that category. Every recipe has price and name and they will be orderd from lowest price to highest. You have option to load more recipes if there are any. You can sarch recipes by name and ingredient name as well.
+If you click on one recipe, you will be redirected on page with all deatils about that recipe you picked. And last feature is adding our recipe.
+To add recipe you have button in header. When you click it you will se form for adding recipe. Remamber that every field is required and that you cant add recipe without single ingredient. One more thing to know, if ingredient measure value is in litres you cant transform and add that ingrediants in kilograms.
+
