@@ -21,7 +21,10 @@ const Categories = () => {
     });
   };
 
+  
+
   useEffect(() => {
+   
     listCategories(0, 9, (response) => {
       addingNewCategories(response);
     });

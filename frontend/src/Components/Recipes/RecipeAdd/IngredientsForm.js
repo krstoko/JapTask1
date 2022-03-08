@@ -1,48 +1,53 @@
 import { Grid } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import FormikControl from "../../FormikComponents/FormikControl";
 import ButtonReusable from "../../ui-component/ButtonReusable";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
+import { getAllIngredients } from "../../../ApiService/IngredientsApi";
+import { renameObjKey } from "../../../HelperFunctions/ObjectFunctions";
+import { measureUnits } from "./MeasureUnits";
 const IngredientsForm = (props) => {
-  const ingredients = [
-    { id: 1, name: "Pizza" },
-    { id: 2, name: "Nesto durgo" },
-    { id: 3, name: "TRece" },
-    { id: 4, name: "Auu" },
-    { id: 5, name: "Dadad" },
-  ];
-  const ingredients2 = [
-    { id: 1, name: "Pizza" },
-    { id: 2, name: "Nesto durgo" },
-    { id: 3, name: "TRece" },
-    { id: 4, name: "Auu" },
-    { id: 5, name: "Dadad" },
-  ];
+  useEffect(() => {
+    getAllIngredients((responseData) => {
+      if (responseData) {
+        const selectIngredients = renameObjKey(
+          responseData.data,
+          "ingredientName",
+          "name"
+        );
+        setIngredients(selectIngredients);
+      }
+    });
+  }, []);
 
-  const onAddIngredient = (values,resetForm) => {
+  const [ingredients, setIngredients] = useState([]);
+
+  const onAddIngredient = (values, resetForm) => {
     props.newIngredient(values);
     resetForm();
   };
 
   const initialValues = {
-    ingrediantName: "",
-    measureUnit: "",
-    measureQuantity: "",
+    ingredientName: "",
+    recipeMeasureUnit: "",
+    recipeMeasureQuantity: "",
   };
 
   const validationSchema = Yup.object({
-    ingrediantName: Yup.string().required("Ingredient name is required"),
-    measureUnit: Yup.string().required("Measure unit is required"),
-    measureQuantity: Yup.string().required("Measure quantity is required"),
+    ingredientName: Yup.string().required("Ingredient name is required"),
+    recipeMeasureUnit: Yup.string().required("Measure unit is required"),
+    recipeMeasureQuantity: Yup.string().required(
+      "Measure quantity is required"
+    ),
   });
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={(values,{resetForm}) => {
-        onAddIngredient(values,resetForm);
+      onSubmit={(values, { resetForm }) => {
+        onAddIngredient(values, resetForm);
       }}
     >
       <Form>
@@ -51,8 +56,8 @@ const IngredientsForm = (props) => {
             <FormikControl
               control="select"
               type="text"
-              label="Recipe Name"
-              name="ingrediantName"
+              label="Ingrediant Name"
+              name="ingredientName"
               options={ingredients}
             />
           </Grid>
@@ -61,17 +66,17 @@ const IngredientsForm = (props) => {
               control="select"
               type="text"
               label="Measure Unit"
-              name="measureUnit"
-              options={ingredients2}
+              name="recipeMeasureUnit"
+              options={measureUnits}
             />
           </Grid>
           <Grid item xs={6}>
             <FormikControl
               control="input"
               type="number"
-              name="measureQuantity"
+              name="recipeMeasureQuantity"
               label="Measure Quantity"
-              InputProps={{ inputProps: { min: "0", max: "10", step: "0.1" } }}
+              InputProps={{ inputProps: { min: "0", step: "0.1" } }}
             />
           </Grid>
           <Grid item xs={6}>

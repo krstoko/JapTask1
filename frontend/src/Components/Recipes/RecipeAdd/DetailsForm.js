@@ -4,23 +4,16 @@ import React, { forwardRef, useEffect, useState } from "react";
 import { getAllCategories } from "../../../ApiService/CategoriesApi";
 import FormikControl from "../../FormikComponents/FormikControl";
 import * as Yup from "yup";
+import { renameObjKey } from "../../../HelperFunctions/ObjectFunctions";
 const DetailsForm = forwardRef((props, ref) => {
   const [categories, setCategories] = useState([]);
   useEffect(() => {
     getAllCategories((responseData) => {
-      const selectCategories = renameObjKey(responseData.data);
+      const selectCategories = renameObjKey(responseData.data,"categoryName","name");
       setCategories(selectCategories);
     });
   }, []);
 
-  const renameObjKey = (array) => {
-    array = array.map((obj) => {
-      obj["name"] = obj["categoryName"];
-      delete obj["categoryName"];
-      return obj;
-    });
-    return array;
-  };
 
   const initialValues = {
     recipeName: "",

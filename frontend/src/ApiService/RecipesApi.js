@@ -34,13 +34,20 @@ const singleRecipe = (recipeId, cb) => {
       cb(false);
     });
 };
-const addRecipe = (recipe) => {
-  return fetch(`https://localhost:44372/recipe/add`, {
-    method: "POST",
-    headers: { Accept: "application/json", "Content-Type": "application/json" },
-    body: JSON.stringify(recipe),
-  })
-    .then((response) => response.json())
-    .catch((err) => console.log(err));
+const addRecipe = (recipe,cb) => {
+  // return fetch(`https://localhost:44372/recipe/add`, {
+  //   method: "POST",
+  //   headers: { Accept: "application/json", "Content-Type": "application/json" },
+  //   body: JSON.stringify(recipe),
+  // })
+  //   .then((response) => response.json())
+  //   .catch((err) => console.log(err));
+  api
+  .post(`/recipe/add`,recipe)
+  .then((response) => cb(response.data))
+  .catch((err) => {
+    console.log(err);
+    cb(false);
+  });
 };
 export { listRecipesForCategory, searchRecipes, singleRecipe, addRecipe };

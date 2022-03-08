@@ -48,13 +48,13 @@ export const recipeAddColumns = () => {
       hide: true,
     },
     {
-      field: "name",
+      field: "ingredientName",
       headerName: "Ingredient name",
       width: 150,
       flex: 1,
     },
     {
-      field: "quantity",
+      field: "recipeMeasureUnit",
       headerName: "Unit quantity",
       type: "number",
       width: 120,
@@ -62,7 +62,7 @@ export const recipeAddColumns = () => {
       align: "center",
     },
     {
-      field: "measureUnit",
+      field: "recipeMeasureQuantity",
       headerName: "Measure Unit",
       width: 120,
       headerAlign: "center",

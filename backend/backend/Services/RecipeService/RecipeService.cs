@@ -23,9 +23,9 @@ namespace backend.Services.RecipeService
             _dataContext = dataContext;
         }
 
-        public async Task<ServiceResponse<List<GetRecipeDto>>> AddRecipe(AddRecipeDto newRecipe)
+        public async Task<ServiceResponse<GetRecipeDto>> AddRecipe(AddRecipeDto newRecipe)
         {
-            var response = new ServiceResponse<List<GetRecipeDto>>();
+            var response = new ServiceResponse<GetRecipeDto>();
             try
             {
                 Recipe recipe = _mapper.Map<Recipe>(newRecipe);
@@ -34,16 +34,38 @@ namespace backend.Services.RecipeService
                 {
                     response.Success = false;
                     response.Message = "Category not found";
+                    return response;
                 }
                 else
                 {
                     recipe.Category = recipeCategory;
                     _dataContext.Recipes.Add(recipe);
                     await _dataContext.SaveChangesAsync();
-                    response.Data = await _dataContext.Recipes.Select(r => _mapper.Map<GetRecipeDto>(r)).ToListAsync();
-                }
 
-                return response;
+                }
+                for (int i = 0; i < newRecipe.RecipeIngredients.Count; i++)
+                {
+                    Ingredient ingredient = await _dataContext.Ingredients.FirstOrDefaultAsync(ingredient => ingredient.IngredientName == newRecipe.RecipeIngredients[i].IngredientName);
+                    if (ingredient == null)
+                    {
+                        response.Success = false;
+                        response.Message = "Ingredient not found";
+                        return response;
+                    }
+                    else
+                    {
+                        RecipesIngredients recipeIngredient = new()
+                        {
+                            IngredientId = ingredient.Id,
+                            RecipeId = recipe.Id,
+                            RecipeMeasureUnit = newRecipe.RecipeIngredients[i].RecipeMeasureUnit,
+                            RecipeMeasureQuantity = newRecipe.RecipeIngredients[i].RecipeMeasureQuantity
+                        };
+                        _dataContext.RecipeIngredients.Add(recipeIngredient);
+                        await _dataContext.SaveChangesAsync();
+                    }
+                }
+                response.Data = _mapper.Map<GetRecipeDto>(recipe);
 
             }
             catch (Exception ex)
@@ -175,7 +197,7 @@ namespace backend.Services.RecipeService
             }
             else
             {
-                unitDifference = 100;
+                unitDifference = 10;
 
             }
             double price = ingredient.LowestMeasureUnitPrice * unitDifference * recipeMeasureQuantity;

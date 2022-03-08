@@ -1,5 +1,6 @@
 using backend.Data;
 using backend.Services.CategoryService;
+using backend.Services.NewFolder;
 using backend.Services.RecipeService;
 using FirstDotNetProject.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -45,6 +46,7 @@ namespace backend
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IRecipeService, RecipeService>();
+            services.AddScoped<IIngredientsService, IngredientsService>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters

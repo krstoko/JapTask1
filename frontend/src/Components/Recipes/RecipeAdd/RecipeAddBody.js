@@ -7,17 +7,22 @@ import Table from "../../ui-component/Table/Table";
 import { recipeAddColumns } from "../../ui-component/Table/TableColumns";
 import { addRecipe } from "../../../ApiService/RecipesApi";
 import MyModal from "../../ui-component/MyModal";
+import SnackbarComponent from "../../ui-component/Snackbar";
 const RecipeAddBody = () => {
   const detailsFormRef = useRef(null);
   const columns = recipeAddColumns();
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState({ open: false, message: "" });
+  const [successSnackbar, setSuccessSnackbar] = useState({
+    open: false,
+    message: "",
+  });
   const [ingredients, setIngredients] = useState([]);
 
   const newIngredient = (ingredient) => {
     let ingredientBody = {
-      name: ingredient.ingrediantName,
-      measureUnit: ingredient.measureUnit,
-      quantity: ingredient.measureQuantity,
+      ingredientName: ingredient.ingredientName,
+      recipeMeasureUnit: ingredient.recipeMeasureUnit,
+      recipeMeasureQuantity: ingredient.recipeMeasureQuantity,
     };
     setIngredients((prevState) => [...prevState, ingredientBody]);
   };
@@ -25,33 +30,48 @@ const RecipeAddBody = () => {
   const rows = ingredients.map((ingredient, id) => {
     return {
       id: id + 1,
-      name: ingredient.name,
-      quantity: ingredient.quantity,
-      measureUnit: ingredient.measureUnit,
+      ingredientName: ingredient.ingredientName,
+      recipeMeasureQuantity: ingredient.recipeMeasureQuantity,
+      recipeMeasureUnit: ingredient.recipeMeasureUnit,
     };
   });
   const addRecipeCall = (recipe) => {
-    addRecipe(recipe).then((res) => {
-      setIngredients([])
+    recipe = { ...recipe, recipeIngredients: ingredients };
+    addRecipe(recipe, (responseData) => {
+      if (responseData && responseData.success) {
+        setIngredients([]);
+        setSuccessSnackbar({
+          open: true,
+          message: "Successfuly created recipe",
+        });
+      }
     });
   };
   const onClickHandler = () => {
     if (ingredients.length === 0) {
-      setOpenModal(true);
+      setOpenModal({
+        open: true,
+        message:
+          "Looks like you tried to add recipe without ingrediants.Please try again with at least one ingredient",
+      });
     } else {
       detailsFormRef.current.handleSubmit();
     }
   };
+  const handleClose = () => setSuccessSnackbar({ open: false, message: "" });
 
   return (
     <React.Fragment>
       <MyModal
         title={"Error happaned"}
-        message={
-          "Looks like you tried to add recipe without ingrediants.Please try again with at least one ingredient"
-        }
-        openModal={openModal}
+        message={openModal.message}
+        openModal={openModal.open}
         closeModal={() => setOpenModal(false)}
+      />
+      <SnackbarComponent
+        open={successSnackbar.open}
+        message={successSnackbar.message}
+        onClose={handleClose}
       />
       <Typography variant="h3" align="center" mt={4}>
         Add new Recipe
