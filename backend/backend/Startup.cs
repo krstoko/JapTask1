@@ -1,4 +1,5 @@
 using backend.Data;
+using backend.Extensions;
 using backend.Services.CategoryService;
 using backend.Services.NewFolder;
 using backend.Services.RecipeService;
@@ -76,6 +77,7 @@ namespace backend
                 .AllowAnyMethod()
                 .AllowAnyHeader();
             });
+            app.ConfigureCustomExceptionMiddleware();
             dataContext.SeedUser();
             app.UseRouting();
             app.UseAuthentication();

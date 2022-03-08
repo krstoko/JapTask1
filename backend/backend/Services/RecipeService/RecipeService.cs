@@ -26,92 +26,75 @@ namespace backend.Services.RecipeService
         public async Task<ServiceResponse<GetRecipeDto>> AddRecipe(AddRecipeDto newRecipe)
         {
             var response = new ServiceResponse<GetRecipeDto>();
-            try
+            Recipe recipe = _mapper.Map<Recipe>(newRecipe);
+            var recipeCategory = await _dataContext.Categories.FirstOrDefaultAsync(c => c.CategoryName == newRecipe.CategoryName);
+            if (recipeCategory == null)
             {
-                Recipe recipe = _mapper.Map<Recipe>(newRecipe);
-                var recipeCategory = await _dataContext.Categories.FirstOrDefaultAsync(c => c.CategoryName == newRecipe.CategoryName);
-                if (recipeCategory == null)
+                response.Success = false;
+                response.Message = "Category not found";
+                return response;
+            }
+            else
+            {
+                recipe.Category = recipeCategory;
+                _dataContext.Recipes.Add(recipe);
+                await _dataContext.SaveChangesAsync();
+
+            }
+            for (int i = 0; i < newRecipe.RecipeIngredients.Count; i++)
+            {
+                Ingredient ingredient = await _dataContext.Ingredients.FirstOrDefaultAsync(ingredient => ingredient.IngredientName == newRecipe.RecipeIngredients[i].IngredientName);
+                if (ingredient == null)
                 {
                     response.Success = false;
-                    response.Message = "Category not found";
+                    response.Message = "Ingredient not found";
                     return response;
                 }
                 else
                 {
-                    recipe.Category = recipeCategory;
-                    _dataContext.Recipes.Add(recipe);
+                    RecipesIngredients recipeIngredient = new()
+                    {
+                        IngredientId = ingredient.Id,
+                        RecipeId = recipe.Id,
+                        RecipeMeasureUnit = newRecipe.RecipeIngredients[i].RecipeMeasureUnit,
+                        RecipeMeasureQuantity = newRecipe.RecipeIngredients[i].RecipeMeasureQuantity
+                    };
+                    _dataContext.RecipeIngredients.Add(recipeIngredient);
                     await _dataContext.SaveChangesAsync();
-
                 }
-                for (int i = 0; i < newRecipe.RecipeIngredients.Count; i++)
-                {
-                    Ingredient ingredient = await _dataContext.Ingredients.FirstOrDefaultAsync(ingredient => ingredient.IngredientName == newRecipe.RecipeIngredients[i].IngredientName);
-                    if (ingredient == null)
-                    {
-                        response.Success = false;
-                        response.Message = "Ingredient not found";
-                        return response;
-                    }
-                    else
-                    {
-                        RecipesIngredients recipeIngredient = new()
-                        {
-                            IngredientId = ingredient.Id,
-                            RecipeId = recipe.Id,
-                            RecipeMeasureUnit = newRecipe.RecipeIngredients[i].RecipeMeasureUnit,
-                            RecipeMeasureQuantity = newRecipe.RecipeIngredients[i].RecipeMeasureQuantity
-                        };
-                        _dataContext.RecipeIngredients.Add(recipeIngredient);
-                        await _dataContext.SaveChangesAsync();
-                    }
-                }
-                response.Data = _mapper.Map<GetRecipeDto>(recipe);
+            }
+            response.Data = _mapper.Map<GetRecipeDto>(recipe);
 
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Message = ex.Message;
-            }
             return response;
         }
 
         public async Task<ServiceResponse<List<GetRecipeDto>>> GetCategoryRecipes(string categoryName, int displeyedRecipes, int pageSize)
         {
             var response = new ServiceResponse<List<GetRecipeDto>>();
-            try
+            Category category = await _dataContext.Categories.FirstOrDefaultAsync(c => c.CategoryName == categoryName);
+            if (category != null)
             {
-                Category category = await _dataContext.Categories.FirstOrDefaultAsync(c => c.CategoryName == categoryName);
-                if (category != null)
-                {
 
-                    var dbRecipes = await _dataContext.Recipes.Include(r => r.RecipesIngredients).Where(r => r.Category.CategoryName == categoryName).ToListAsync();
-                    var recipesDto = dbRecipes.Select(r => _mapper.Map<GetRecipeDto>(r)).ToList();
-                    var allRecipes = recipesDto.Count;
-                    for (int i = 0; i < allRecipes; i++)
-                    {
-                        await AddingIngredientAndPricing(recipesDto[i]);
-                    }
-
-                    if (allRecipes <= displeyedRecipes + pageSize)
-                    {
-                        response.LoadMore = false;
-                        response.Message = "Cant load more";
-                    }
-                    response.Data = recipesDto.OrderBy(r => r.Price).Skip(displeyedRecipes).Take(pageSize).ToList();
-                    response.TotalDataNumber = allRecipes;
-                }
-                else
+                var dbRecipes = await _dataContext.Recipes.Include(r => r.RecipesIngredients).Where(r => r.Category.CategoryName == categoryName).ToListAsync();
+                var recipesDto = dbRecipes.Select(r => _mapper.Map<GetRecipeDto>(r)).ToList();
+                var allRecipes = recipesDto.Count;
+                for (int i = 0; i < allRecipes; i++)
                 {
-                    response.Success = false;
-                    response.Message = "Category Not Found";
+                    await AddingIngredientAndPricing(recipesDto[i]);
                 }
 
+                if (allRecipes <= displeyedRecipes + pageSize)
+                {
+                    response.LoadMore = false;
+                    response.Message = "Cant load more";
+                }
+                response.Data = recipesDto.OrderBy(r => r.Price).Skip(displeyedRecipes).Take(pageSize).ToList();
+                response.TotalDataNumber = allRecipes;
             }
-            catch (Exception ex)
+            else
             {
                 response.Success = false;
-                response.Message = ex.Message;
+                response.Message = "Category Not Found";
             }
 
             return response;
@@ -132,37 +115,30 @@ namespace backend.Services.RecipeService
         public async Task<ServiceResponse<List<GetRecipeDto>>> GetSearchRecipes(string categoryName, string searchValue, int displeyedRecipes, int pageSize)
         {
             var response = new ServiceResponse<List<GetRecipeDto>>();
-            try
-            {
-                Category category = await _dataContext.Categories.FirstOrDefaultAsync(c => c.CategoryName == categoryName);
-                if (category != null)
-                {
-                    var dbRecipes = await _dataContext.Recipes.Include(r => r.RecipesIngredients).Where(r => r.Category.CategoryName == categoryName && r.RecipeName.Contains(searchValue)).ToListAsync();
-                    var recipesDto = dbRecipes.Select(r => _mapper.Map<GetRecipeDto>(r)).ToList();
-                    var allRecipes = recipesDto.Count;
-                    for (int i = 0; i < allRecipes; i++)
-                    {
-                        await AddingIngredientAndPricing(recipesDto[i]);
-                    }
 
-                    if (allRecipes <= displeyedRecipes + pageSize)
-                    {
-                        response.LoadMore = false;
-                        response.Message = "Cant load more";
-                    }
-                    response.Data = recipesDto.OrderBy(r => r.Price).Skip(displeyedRecipes).Take(pageSize).ToList();
-                    response.TotalDataNumber = allRecipes;
-                }
-                else
+            Category category = await _dataContext.Categories.FirstOrDefaultAsync(c => c.CategoryName == categoryName);
+            if (category != null)
+            {
+                var dbRecipes = await _dataContext.Recipes.Include(r => r.RecipesIngredients).Where(r => r.Category.CategoryName == categoryName && r.RecipeName.Contains(searchValue)).ToListAsync();
+                var recipesDto = dbRecipes.Select(r => _mapper.Map<GetRecipeDto>(r)).ToList();
+                var allRecipes = recipesDto.Count;
+                for (int i = 0; i < allRecipes; i++)
                 {
-                    response.Success = false;
-                    response.Message = "Category Not Found";
+                    await AddingIngredientAndPricing(recipesDto[i]);
                 }
+
+                if (allRecipes <= displeyedRecipes + pageSize)
+                {
+                    response.LoadMore = false;
+                    response.Message = "Cant load more";
+                }
+                response.Data = recipesDto.OrderBy(r => r.Price).Skip(displeyedRecipes).Take(pageSize).ToList();
+                response.TotalDataNumber = allRecipes;
             }
-            catch (Exception ex)
+            else
             {
                 response.Success = false;
-                response.Message = ex.Message;
+                response.Message = "Category Not Found";
             }
             return response;
         }
@@ -198,7 +174,6 @@ namespace backend.Services.RecipeService
             else
             {
                 unitDifference = 10;
-
             }
             double price = ingredient.LowestMeasureUnitPrice * unitDifference * recipeMeasureQuantity;
             return Math.Round(price, 2);

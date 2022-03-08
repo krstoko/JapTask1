@@ -1,4 +1,6 @@
-﻿namespace backend.Models
+﻿using System.Text.Json;
+
+namespace backend.Models
 {
     public class ServiceResponse<T>
     {
@@ -7,5 +9,10 @@
         public string Message { get; set; } = null;
         public bool LoadMore { get; set; } = true;
         public int TotalDataNumber { get; set; }
+
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(this);
+        }
     }
 }
