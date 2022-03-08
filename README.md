@@ -29,6 +29,13 @@ is to use our start command. We will do that by using `npm start`.
 
 ## Backend
 
+For bakcend we need to install couple of thing:
+
+* [Visual Studio](https://visualstudio.microsoft.com/)
+* [Sql Server Managment Studio](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver15)
+* [Sql Server Express Version](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
+
+After you install all of that you can open Visual Studio and click on `Open Project`. On right side you will see Solution explorer and click on `backend.sln`. Before we do anything in our backend first you should head to SQL Server Managment Studio you installed and connect to local database. After you do that go into Visual Studio and go into Package Manager Console. You will do that by going `View > Other Windows > Package Manager Console`. After that terminal open you need to type `Add-Migration newMigration` and after that is done you need to type and do `Update-Database`. After all that is finish you just need to press Start button and thats it.
 
 # Application manual
 
