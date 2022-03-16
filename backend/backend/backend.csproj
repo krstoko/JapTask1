@@ -15,4 +15,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Backend.Core\Backend.Core.csproj" />
+    <ProjectReference Include="..\Backend.Database\Backend.Database.csproj" />
+    <ProjectReference Include="..\Backend.Mapper\Backend.Mapper.csproj" />
+    <ProjectReference Include="..\Backend.Service\Backend.Service.csproj" />
+  </ItemGroup>
+
 </Project>

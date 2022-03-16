@@ -1,4 +1,5 @@
-﻿using backend.Data;
+﻿using backend.Core.Common;
+using backend.Data;
 using backend.Dtos.User;
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<ActionResult<ServiceResponse<string>>> Login(UserLoginDto request)
+        public async Task<IActionResult> Login(UserLoginDto request)
         {
             ServiceResponse<string> response = await _authRepo.Login(
                 request.Username, request.Password
