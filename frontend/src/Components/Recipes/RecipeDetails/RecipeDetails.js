@@ -18,13 +18,13 @@ const RecipeDetails = () => {
           Recipe Name:
         </Typography>
         <Typography paragraph sx={recipeDetailsStyle.paragraph} gutterBottom>
-          {recipeDetails.recipeName}
+          {recipeDetails.name}
         </Typography>
         <Typography variant="h5" sx={recipeDetailsStyle.higher} gutterBottom>
           Recipe Category:
         </Typography>
         <Typography paragraph sx={recipeDetailsStyle.paragraph} gutterBottom>
-          {recipeDetails.category.categoryName}
+          {recipeDetails.category.name}
         </Typography>
         <Typography variant="h5" sx={recipeDetailsStyle.higher} gutterBottom>
           Recipe Description:

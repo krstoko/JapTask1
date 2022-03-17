@@ -15,12 +15,12 @@ const RecipeBox = ({recipe}) => {
         <CardMedia
           component="img"
           height="140"
-          image={recipe.recipeImgUrl}
-          alt="green iguana"
+          image={recipe.imgUrl}
+          alt="recipeImg"
         />
         <CardContent sx={boxStyle}>
           <Typography gutterBottom variant="h5" component="div">
-            {recipe.recipeName}
+            {recipe.name}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {recipe.price}$

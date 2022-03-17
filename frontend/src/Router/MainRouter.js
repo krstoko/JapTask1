@@ -19,7 +19,7 @@ const MainRouter = () => {
 
         <Route path="/" element={<PrivateRoute />}>
           <Route path="categories" element={<Categories />} />
-          <Route path="recipes/:categorieName" element={<Recipes />} />
+          <Route path="recipes/:categoryId" element={<Recipes />} />
           <Route path="recipe/:recipeId" element={<Recipe />} />
           <Route path="recipe/add" element={<RecipeAdd />} />
         </Route>

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace backend.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class IngredientsController : ControllerBase

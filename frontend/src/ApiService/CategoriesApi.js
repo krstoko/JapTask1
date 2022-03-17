@@ -1,9 +1,9 @@
 import api from "./AxiosConfigure";
-const listCategories = (displeyedCategories, pageSize, cb) => {
+const listCategories = (skip, pageSize, cb) => {
   api
-    .get("/category/getLoadMoreCategories", {
+    .get("/categories/getPage", {
       params: {
-        displeyedCategories: displeyedCategories,
+        skip: skip,
         pageSize: pageSize,
       },
     })
@@ -16,7 +16,7 @@ const listCategories = (displeyedCategories, pageSize, cb) => {
 
 const getAllCategories = (cb) => {
   api
-    .get("/category/all")
+    .get("/categories")
     .then((response) => cb(response.data))
     .catch((err) => {
       console.log(err);

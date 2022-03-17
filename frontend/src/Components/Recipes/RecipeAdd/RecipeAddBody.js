@@ -8,16 +8,20 @@ import { recipeAddColumns } from "../../ui-component/Table/TableColumns";
 import { addRecipe } from "../../../ApiService/RecipesApi";
 import MyModal from "../../ui-component/MyModal";
 import SnackbarComponent from "../../ui-component/Snackbar";
+import { measureUnits } from "./MeasureUnits";
 const RecipeAddBody = () => {
   const detailsFormRef = useRef(null);
 
   const removeIngredient = (ingredientDetails) => {
-    setIngredients((prevState) => prevState.filter((ingredient,index) => index + 1 !== ingredientDetails.id))
+    setIngredients((prevState) =>
+      prevState.filter(
+        (ingredient, index) => index + 1 !== ingredientDetails.id
+      )
+    );
   };
 
   const columns = recipeAddColumns(removeIngredient);
 
- 
   const [openModal, setOpenModal] = useState({ open: false, message: "" });
   const [successSnackbar, setSuccessSnackbar] = useState({
     open: false,
@@ -26,24 +30,29 @@ const RecipeAddBody = () => {
   const [ingredients, setIngredients] = useState([]);
 
   const newIngredient = (ingredient) => {
-    let ingredientBody = {
-      ingredientName: ingredient.ingredientName,
-      recipeMeasureUnit: ingredient.recipeMeasureUnit,
-      recipeMeasureQuantity: ingredient.recipeMeasureQuantity,
-    };
-    setIngredients((prevState) => [...prevState, ingredientBody]);
+    setIngredients((prevState) => [...prevState, ingredient]);
   };
 
   const rows = ingredients.map((ingredient, id) => {
+    console.log(ingredient.ingredientName.name);
     return {
       id: id + 1,
-      ingredientName: ingredient.ingredientName,
+      ingredientName: ingredient.ingredientName.name,
+      recipeMeasureUnit: ingredient.recipeMeasureUnit.name,
       recipeMeasureQuantity: ingredient.recipeMeasureQuantity,
-      recipeMeasureUnit: ingredient.recipeMeasureUnit,
     };
   });
+
   const addRecipeCall = (recipe) => {
-    recipe = { ...recipe, recipeIngredients: ingredients };
+    recipe.categoryId = recipe.categoryId.id;
+    var recipeIngredients = ingredients.map((ingredient) => {
+      return {
+        ingredientId: ingredient.ingredientName.id,
+        recipeMeasureUnit: ingredient.recipeMeasureUnit.id,
+        recipeMeasureQuantity: ingredient.recipeMeasureQuantity
+      };
+    });
+    recipe = { ...recipe, recipeIngredients};
     addRecipe(recipe, (responseData) => {
       if (responseData && responseData.data) {
         setIngredients([]);
@@ -56,15 +65,16 @@ const RecipeAddBody = () => {
       }
     });
   };
+
   const onClickHandler = () => {
-    if (ingredients.length === 0) {
+     if (ingredients.length === 0) {
       settingErrorState(
         true,
         "Looks like you tried to add recipe without ingrediants.Please try again with at least one ingredient"
       );
     } else {
-      detailsFormRef.current.handleSubmit();
-    }
+    detailsFormRef.current.handleSubmit();
+     }
   };
 
   const settingErrorState = (open, message) => {

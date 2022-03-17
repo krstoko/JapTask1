@@ -2,7 +2,7 @@ import api from "./AxiosConfigure";
 
 const getAllIngredients = (cb) => {
   api
-    .get("/ingredient/all")
+    .get("/ingredients")
     .then((response) => cb(response.data))
     .catch((err) => {
       console.log(err);

@@ -9,7 +9,7 @@ const RecipeBody = () => {
   return (
     <React.Fragment>
       <Image
-        src={recipeDetails.recipeImgUrl}
+        src={recipeDetails.imgUrl}
         alt="Image"
       />
       <RecipeInformations />

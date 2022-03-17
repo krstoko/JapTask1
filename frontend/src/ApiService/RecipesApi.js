@@ -1,8 +1,8 @@
 import api from "./AxiosConfigure";
 
-const listRecipesForCategory = (categoryName, data, cb) => {
+const listRecipesForCategory = (data, cb) => {
   api
-    .get(`/recipe/${categoryName}`, {
+    .get(`/recipes`, {
       params: data,
     })
     .then((response) => cb(response.data))
@@ -12,9 +12,9 @@ const listRecipesForCategory = (categoryName, data, cb) => {
     });
 };
 
-const searchRecipes = (categoryName, data, cb) => {
+const searchRecipes = (data, cb) => {
   api
-    .get(`/recipe/search/${categoryName}`, {
+    .get(`/recipes/search`, {
       params: data,
     })
     .then((response) => cb(response.data))
@@ -27,7 +27,7 @@ const searchRecipes = (categoryName, data, cb) => {
 const singleRecipe = (recipeId, cb) => {
 
   api
-    .get(`/recipe/single/${recipeId}`)
+    .get(`/recipes/${recipeId}`)
     .then((response) => cb(response.data))
     .catch((err) => {
       console.log(err);
@@ -35,15 +35,8 @@ const singleRecipe = (recipeId, cb) => {
     });
 };
 const addRecipe = (recipe,cb) => {
-  // return fetch(`https://localhost:44372/recipe/add`, {
-  //   method: "POST",
-  //   headers: { Accept: "application/json", "Content-Type": "application/json" },
-  //   body: JSON.stringify(recipe),
-  // })
-  //   .then((response) => response.json())
-  //   .catch((err) => console.log(err));
   api
-  .post(`/recipe/add`,recipe)
+  .post(`/recipes`,recipe)
   .then((response) => cb(response.data))
   .catch((err) => {
     console.log(err);

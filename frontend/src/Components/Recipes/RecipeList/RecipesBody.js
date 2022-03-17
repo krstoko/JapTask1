@@ -10,7 +10,7 @@ import {
 import { useParams } from "react-router-dom";
 import { recipesBodyStyle } from "../../Style/RecipesBodyStyle";
 const RecipesBody = () => {
-  const { categorieName } = useParams();
+  const { categoryId } = useParams();
   const [loadMore, setLoadMore] = useState(true);
   const [recipes, setRecipes] = useState([]);
   const [totalAvailableRecipes, setTotalAvailableRecipes] = useState(0);
@@ -22,10 +22,10 @@ const RecipesBody = () => {
       getInitialRecipes("search");
     } else {
       searchRecipes(
-        categorieName,
         {
+          categoryId,
           searchValue: e.target.value,
-          displeyedRecipes: 0,
+          skip: 0,
           pageSize: 9,
         },
         (dataResponse) => {
@@ -37,15 +37,11 @@ const RecipesBody = () => {
 
   const getInitialRecipes = useCallback(
     (type) => {
-      listRecipesForCategory(
-        categorieName,
-        { displeyedRecipes: 0, pageSize: 9 },
-        (responseData) => {
-          if (responseData) addingNewRecipes(responseData, type);
-        }
-      );
+      listRecipesForCategory({ categoryId, skip: 0, pageSize: 9 }, (responseData) => {
+        if (responseData) addingNewRecipes(responseData, type);
+      });
     },
-    [categorieName]
+    [categoryId]
   );
 
   const addingNewRecipes = (response, type) => {
@@ -61,10 +57,10 @@ const RecipesBody = () => {
   const onClickMoreHandler = () => {
     if (searchValue.length > 2) {
       searchRecipes(
-        categorieName,
         {
+          categoryId,
           searchValue,
-          displeyedRecipes: recipes.length,
+          skip: recipes.length,
           pageSize: 9,
         },
         (responseData) => {
@@ -73,8 +69,7 @@ const RecipesBody = () => {
       );
     } else {
       listRecipesForCategory(
-        categorieName,
-        { displeyedRecipes: recipes.length, pageSize: 9 },
+        { categoryId, skip: recipes.length, pageSize: 9 },
         (responseData) => {
           if (responseData) addingNewRecipes(responseData);
         }

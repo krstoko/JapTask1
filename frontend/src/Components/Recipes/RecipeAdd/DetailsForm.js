@@ -9,24 +9,24 @@ const DetailsForm = forwardRef((props, ref) => {
   const [categories, setCategories] = useState([]);
   useEffect(() => {
     getAllCategories((responseData) => {
-      const selectCategories = renameObjKey(responseData.data,"categoryName","name");
-      setCategories(selectCategories);
+      setCategories(responseData.data);
     });
   }, []);
 
 
   const initialValues = {
-    recipeName: "",
-    categoryName: "",
+    name: "",
+    categoryId: "",
     description: "",
-    recipeImgUrl: "",
+    imgUrl: "",
   };
 
+  
   const validationSchema = Yup.object({
-    recipeName: Yup.string().required("Recipe name is required"),
-    categoryName: Yup.string().required("Category is required"),
+    name: Yup.string().required("Recipe name is required"),
+    categoryId: Yup.object().required("Category is required"),
     description: Yup.string().required("Description is required"),
-    recipeImgUrl: Yup.string().required("Image url is required"),
+    imgUrl: Yup.string().required("Image url is required"),
   });
   return (
     <Formik
@@ -45,13 +45,13 @@ const DetailsForm = forwardRef((props, ref) => {
               control="input"
               type="text"
               label="Recipe Name"
-              name="recipeName"
+              name="name"
             />
           </Grid>
           <Grid item xs={6}>
             <FormikControl
               control="select"
-              name="categoryName"
+              name="categoryId"
               label="Recipe Category"
               options={categories}
             />
@@ -61,7 +61,7 @@ const DetailsForm = forwardRef((props, ref) => {
               control="input"
               type="text"
               label="Recipe Image Url"
-              name="recipeImgUrl"
+              name="imgUrl"
             />
           </Grid>
           <Grid item xs={12}>

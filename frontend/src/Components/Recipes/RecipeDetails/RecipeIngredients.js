@@ -11,7 +11,7 @@ const RecipeIngredients = () => {
   const rows = recipeDetails.recipesIngredients.map((ingredient, id) => {
     return {
       id: id + 1,
-      name: ingredient.ingredient.ingredientName,
+      name: ingredient.ingredient.name,
       quantity: ingredient.recipeMeasureQuantity,
       measureUnit: ingredient.recipeMeasureUnit,
       price: ingredient.realIngredientPrice + "$"

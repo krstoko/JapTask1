@@ -5,18 +5,12 @@ import ButtonReusable from "../../ui-component/ButtonReusable";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
 import { getAllIngredients } from "../../../ApiService/IngredientsApi";
-import { renameObjKey } from "../../../HelperFunctions/ObjectFunctions";
 import { measureUnits } from "./MeasureUnits";
 const IngredientsForm = (props) => {
   useEffect(() => {
     getAllIngredients((responseData) => {
       if (responseData) {
-        const selectIngredients = renameObjKey(
-          responseData.data,
-          "ingredientName",
-          "name"
-        );
-        setIngredients(selectIngredients);
+        setIngredients(responseData.data);
       }
     });
   }, []);
@@ -24,6 +18,7 @@ const IngredientsForm = (props) => {
   const [ingredients, setIngredients] = useState([]);
 
   const onAddIngredient = (values, resetForm) => {
+    console.log(values)
     props.newIngredient(values);
     resetForm();
   };
@@ -35,8 +30,8 @@ const IngredientsForm = (props) => {
   };
 
   const validationSchema = Yup.object({
-    ingredientName: Yup.string().required("Ingredient name is required"),
-    recipeMeasureUnit: Yup.string().required("Measure unit is required"),
+    ingredientName: Yup.object().required("Ingredient name is required"),
+    recipeMeasureUnit: Yup.object().required("Measure unit is required"),
     recipeMeasureQuantity: Yup.string().required(
       "Measure quantity is required"
     ),
